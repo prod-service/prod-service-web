@@ -6,7 +6,7 @@ export default async function Page() {
   return <div>
     <p>Calc Page</p>;
     <p>{ users.map((user) => {
-      return <span>{user.name}</span>
+      return <span key={user.id}>{user.name}</span>
     }) }</p>
   </div>
 }
