@@ -1,5 +1,6 @@
 'use client'
 
+import { getMenuObject, getProducts } from "../lib/menu-table-parser";
 import FileUpload from "./FileUpload";
 import { read, utils } from "xlsx";
 
@@ -14,8 +15,8 @@ export default function MenuUpload() {
             const sheet = workbook.Sheets[sheetName];
             const sheetData = utils.sheet_to_json(sheet);
     
-            console.log(sheetData);
-
+            const productsList = getProducts(sheetData)
+            const menu = getMenuObject(sheetData.slice(3), productsList);
         }
 
         reader.readAsArrayBuffer(file);
