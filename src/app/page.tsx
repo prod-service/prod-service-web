@@ -1,9 +1,22 @@
+'use client'
+
 import Image from "next/image";
 import "./styles/globals.scss";
 import Link from "next/link";
 import MenuUpload from "./components/MenuUpload";
+import { useState } from "react";
+import { IMenuObj } from "./lib/menu-table-parser";
+import MenuFullList from "./components/MenuFullList";
 
-export default function Home() {
+const Home: React.FC = () => {
+  const [mainMenu, setMainManu] = useState({});
+
+  const menuUploadHandler = (menu: IMenuObj | Object) => {
+    setMainManu(menu);
+  };
+
+  const menuRemoveHandler = () => setMainManu({});
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -28,9 +41,13 @@ export default function Home() {
           priority
         />
 
-        <MenuUpload  />
+        <MenuUpload onMenuUpload={menuUploadHandler} onMenuRemove={menuRemoveHandler} />
+
+        <MenuFullList menuObject={mainMenu} />
 
       </main>
     </div>
   );
-}
+};
+
+export default Home;

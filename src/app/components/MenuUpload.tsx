@@ -1,10 +1,15 @@
 'use client'
 
-import { getMenuObject, getProducts } from "../lib/menu-table-parser";
+import { getMenuObject, getProducts, IMenuObj } from "../lib/menu-table-parser";
 import FileUpload from "./FileUpload";
 import { read, utils } from "xlsx";
 
-export default function MenuUpload() {
+interface MenuUploadProps {
+    onMenuUpload: (file: IMenuObj | Object) => void;
+    onMenuRemove: () => void;
+}
+
+const MenuUpload: React.FC<MenuUploadProps> = ({ onMenuUpload, onMenuRemove }) => {
     const handlerUploading = (file: File) => {
         console.log(file);
         const reader = new FileReader();
@@ -17,15 +22,22 @@ export default function MenuUpload() {
     
             const productsList = getProducts(sheetData)
             const menu = getMenuObject(sheetData.slice(3), productsList);
+
+            onMenuUpload(menu);
         }
 
-        reader.readAsArrayBuffer(file);
-        
+        if (file instanceof Blob) reader.readAsArrayBuffer(file);
+    }
+
+    const handlerRemoveFile = () => {
+        onMenuRemove();
     }
 
     return(
         <div className="menu-upload">
-            <FileUpload onFileUpload={handlerUploading} />
+            <FileUpload onFileUpload={handlerUploading} onRemoveFile={handlerRemoveFile} />
         </div>
     );
-}
+};
+
+export default MenuUpload;

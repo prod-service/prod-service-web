@@ -6,7 +6,7 @@ interface IProduct {
     [productKey: string]: string
 };
 
-interface IMenuObj {
+export interface IMenuObj {
     [dayKey: string]: {
         [mealKey: string]: {
             [dishKey: string]: IProduct
@@ -19,7 +19,9 @@ interface IGetMenuParams {
     productList: IProduct | Object
 };
 
-const getValueByKey = (key: string, someObj: Object): any => {
+export const getValueByKey = (key: string, someObj: Object): any => {
+    if (!someObj) return null;
+    
     return someObj[key as keyof typeof someObj];
 };
 
@@ -81,8 +83,6 @@ export const getMenuObject = (
             }
         }
     });
-
-    console.log(result);
 
     return result;
 }

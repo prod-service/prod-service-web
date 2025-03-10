@@ -4,9 +4,10 @@ import { useRef, useState } from "react";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
+  onRemoveFile: () => void;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onRemoveFile }) => {
     const [fileName, setFileName] = useState<string>("");
     const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -28,6 +29,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
     const handleFileRemove = () => {
         if (hiddenFileInput.current?.value) hiddenFileInput.current.value = '';
         setFileName("");
+        onRemoveFile();
     };
 
   return (
