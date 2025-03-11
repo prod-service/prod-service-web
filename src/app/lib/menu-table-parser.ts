@@ -1,8 +1,11 @@
+import { mealNames } from "../consts";
+import { getValueByKey } from "../helpers";
+
 interface IRawTableData {
     [key: string]: string
 };
 
-interface IProduct {
+export interface IProduct {
     [productKey: string]: string
 };
 
@@ -14,14 +17,7 @@ export interface IMenuObj {
     }
 };
 
-export const getValueByKey = (key: string, someObj: object): any => {
-    if (!someObj) return null;
-    
-    return someObj[key as keyof typeof someObj];
-};
-
 const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
-
     return Object.keys(dishObj).reduce((prev, curr) => {
         const name = getValueByKey(curr, productList);
         if (!name) return prev;
@@ -31,6 +27,11 @@ const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct)
             [name]: getValueByKey(curr, dishObj)
         }
     }, {})
+};
+
+const checkMealNames = (mealName: string) => {
+    if (typeof mealName !== 'string') return false;
+    return mealNames.some(n => n === mealName.toLocaleLowerCase().trim());
 };
 
 export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct | object => {
@@ -62,7 +63,7 @@ export const getMenuObject = (
             }
         }
 
-        if (rowTable[mealKey]) {
+        if (rowTable[mealKey] && checkMealNames(rowTable[mealKey])) {
             result[currentDay] = {
                 ...result[currentDay],
                 [rowTable[mealKey].trim()]: {}

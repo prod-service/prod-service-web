@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { getValueByKey, IMenuObj } from "../../lib/menu-table-parser";
+import { IMenuObj } from "@/app/lib/menu-table-parser";
 import MenuSingleDay from "./MenuSingleDay";
 import Popup from "../Popup";
+import { getValueByKey } from "@/app/helpers";
+import MealCalcForm from "./MealForm";
 
 interface MenuFullListProps {
     menuObject: IMenuObj
@@ -28,8 +30,7 @@ const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
                             <button onClick={openPopup} className="transition bg-indigo-500 hover:bg-indigo-400 p-1 rounded text-white">Open day</button>
                             <MenuSingleDay dayObject={getValueByKey(day, menuObject)} />
                             <Popup isOpen={isPopupOpen} onClose={closePopup}>
-                                <h2>Popup title</h2>
-                                <MenuSingleDay dayObject={getValueByKey(day, menuObject)} />
+                                <MealCalcForm formObjects={getValueByKey(day, menuObject)} />
                             </Popup>
                         </li>
                     }) }

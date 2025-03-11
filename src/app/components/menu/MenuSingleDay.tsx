@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { getValueByKey } from "../../lib/menu-table-parser";
+import { getValueByKey } from "@/app/helpers";
 
 interface ManuSingleDayProps {
     dayObject: object
@@ -10,12 +10,6 @@ interface ManuSingleDayProps {
 const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
     const [mealList, setMealList] = useState<Array<string>>([]);
 
-
-    const filterMealNames = (arr: Array<string>): Array<string> => {
-        const mealNames = ['сніданок', 'обід', 'вечеря']; // TODO: move to separate file
-        return arr.filter(meal => mealNames.find(mealN => meal.trim().toLocaleLowerCase() === mealN));
-    };
-
     const getDishList = (mealName: string): Array<string> => {
         if (!mealName || !dayObject) return [''];
 
@@ -23,7 +17,7 @@ const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
     };
         
     useEffect(() => {
-        if (dayObject) setMealList(filterMealNames(Object.keys(dayObject)));
+        if (dayObject) setMealList(Object.keys(dayObject));
     }, [dayObject]);
     return (
         <div>
