@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getValueByKey } from "../../lib/menu-table-parser";
 
 interface ManuSingleDayProps {
-    dayObject: Object
+    dayObject: object
 };
 
 const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {

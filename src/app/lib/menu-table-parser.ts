@@ -14,18 +14,13 @@ export interface IMenuObj {
     }
 };
 
-interface IGetMenuParams {
-    inputTable: IRawTableData[] | unknown[],
-    productList: IProduct | Object
-};
-
-export const getValueByKey = (key: string, someObj: Object): any => {
+export const getValueByKey = (key: string, someObj: object): any => {
     if (!someObj) return null;
     
     return someObj[key as keyof typeof someObj];
 };
 
-const getIngredientsValues = (productList: IProduct | Object, dishObj: IProduct): IProduct => {
+const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
 
     return Object.keys(dishObj).reduce((prev, curr) => {
         const name = getValueByKey(curr, productList);
@@ -38,7 +33,7 @@ const getIngredientsValues = (productList: IProduct | Object, dishObj: IProduct)
     }, {})
 };
 
-export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct | Object => {
+export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct | object => {
     return {
         ...inputTable.slice(1,2)[0] || {},
         ...inputTable.slice(2,3)[0] || {}
@@ -47,8 +42,8 @@ export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct |
 
 export const getMenuObject = (
     inputTable: IRawTableData[] | unknown[],
-    productList: IProduct | Object
-): IMenuObj | Object => {
+    productList: IProduct | object
+): IMenuObj | object => {
     const dayKey = '__EMPTY';
     const mealKey = '__EMPTY_1';
     const dishKey = '__EMPTY_2';
@@ -56,7 +51,7 @@ export const getMenuObject = (
     let currentDay = '';
     let currentMeal = '';
 
-    inputTable.forEach((rowTable: any, idx) => {
+    inputTable.forEach((rowTable: any) => {
         currentDay = rowTable[dayKey] || currentDay;
         currentMeal = rowTable[mealKey] || currentMeal;
 

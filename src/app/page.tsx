@@ -11,7 +11,7 @@ import MenuFullList from "./components/menu/MenuFullList";
 const Home: React.FC = () => {
   const [mainMenu, setMainManu] = useState({});
 
-  const menuUploadHandler = (menu: IMenuObj | Object) => {
+  const menuUploadHandler = (menu: IMenuObj | object) => {
     setMainManu(menu);
   };
 

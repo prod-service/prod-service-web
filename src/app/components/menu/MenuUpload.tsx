@@ -5,7 +5,7 @@ import FileUpload from "../FileUpload";
 import { read, utils } from "xlsx";
 
 interface MenuUploadProps {
-    onMenuUpload: (file: IMenuObj | Object) => void;
+    onMenuUpload: (file: IMenuObj | object) => void;
     onMenuRemove: () => void;
 }
 
