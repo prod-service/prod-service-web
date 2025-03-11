@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getValueByKey, IMenuObj } from "../lib/menu-table-parser";
+import { getValueByKey, IMenuObj } from "../../lib/menu-table-parser";
 import MenuSingleDay from "./MenuSingleDay";
+import Popup from "../Popup";
 
 interface MenuFullListProps {
     menuObject: IMenuObj
@@ -8,6 +9,10 @@ interface MenuFullListProps {
 
 const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
     const [dayList, setDayList] = useState<Array<string>>([]);
+    const [isPopupOpen, setPopupOpen] = useState(false);
+
+    const openPopup = () => setPopupOpen(true);
+    const closePopup = () => setPopupOpen(false);
     
     useEffect(() => {
         setDayList(Object.keys(menuObject));
@@ -20,7 +25,12 @@ const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
                     { dayList.map((day, index) => {
                         return <li key={index} className="p-2 md:p-4 mb-4 border-2">
                             <span className="font-bold">{day}</span>
+                            <button onClick={openPopup} className="transition bg-indigo-500 hover:bg-indigo-400 p-1 rounded text-white">Open day</button>
                             <MenuSingleDay dayObject={getValueByKey(day, menuObject)} />
+                            <Popup isOpen={isPopupOpen} onClose={closePopup}>
+                                <h2>Popup title</h2>
+                                <MenuSingleDay dayObject={getValueByKey(day, menuObject)} />
+                            </Popup>
                         </li>
                     }) }
                 </ul>

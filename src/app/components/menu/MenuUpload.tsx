@@ -1,7 +1,7 @@
 'use client'
 
-import { getMenuObject, getProducts, IMenuObj } from "../lib/menu-table-parser";
-import FileUpload from "./FileUpload";
+import { getMenuObject, getProducts, IMenuObj } from "../../lib/menu-table-parser";
+import FileUpload from "../FileUpload";
 import { read, utils } from "xlsx";
 
 interface MenuUploadProps {

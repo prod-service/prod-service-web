@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { getValueByKey } from "../lib/menu-table-parser";
+import { getValueByKey } from "../../lib/menu-table-parser";
 
 interface ManuSingleDayProps {
     dayObject: Object
@@ -9,7 +9,7 @@ interface ManuSingleDayProps {
 
 const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
     const [mealList, setMealList] = useState<Array<string>>([]);
-    const [dishList, setDishList] = useState<Array<string>>([]);
+
 
     const filterMealNames = (arr: Array<string>): Array<string> => {
         const mealNames = ['сніданок', 'обід', 'вечеря']; // TODO: move to separate file
@@ -39,6 +39,8 @@ const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
                                     );
                                 })}
                             </ul>
+
+                            
                         </li>
                     }) }
                 </ul>

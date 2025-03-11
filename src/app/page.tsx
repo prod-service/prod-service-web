@@ -3,10 +3,10 @@
 import Image from "next/image";
 import "./styles/globals.scss";
 import Link from "next/link";
-import MenuUpload from "./components/MenuUpload";
+import MenuUpload from "./components/menu/MenuUpload";
 import { useState } from "react";
 import { IMenuObj } from "./lib/menu-table-parser";
-import MenuFullList from "./components/MenuFullList";
+import MenuFullList from "./components/menu/MenuFullList";
 
 const Home: React.FC = () => {
   const [mainMenu, setMainManu] = useState({});
