@@ -11,7 +11,6 @@ interface MenuUploadProps {
 
 const MenuUpload: React.FC<MenuUploadProps> = ({ onMenuUpload, onMenuRemove }) => {
     const handlerUploading = (file: File) => {
-        console.log(file);
         const reader = new FileReader();
 
         reader.onload = (event) => {

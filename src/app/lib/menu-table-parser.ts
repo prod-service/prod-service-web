@@ -6,7 +6,7 @@ interface IRawTableData {
 };
 
 export interface IProduct {
-    [productKey: string]: string
+    [productKey: string]: string | number
 };
 
 export interface IMenuObj {
