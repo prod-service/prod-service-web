@@ -18,7 +18,7 @@ const ProductListValues: React.FC<ProductListValuesProps> = ({ productListObj })
             { productList.length > 0 && productList.map((prod, idx) => {
                 return (
                     <li key={idx}>
-                        { prod } - { getValueByKey(prod, productListObj) }
+                        { prod } - { getValueByKey(prod, productListObj) } кг
                     </li>
                 );
             }) }

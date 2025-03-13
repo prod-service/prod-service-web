@@ -7,3 +7,8 @@ export const getValueByKey = (key: string, someObj: object): any => {
 export const filterStringsArr = (filterNames: Array<string>, unFilteredarr: Array<string>): Array<string> => {
     return unFilteredarr.filter(unFilt => filterNames.find(mealN => unFilt.trim().toLocaleLowerCase() === mealN));
 };
+
+export const parseToNum = (str: string | number): number => {
+    if (typeof str === 'number') return str;
+    return Number(str.replaceAll(',', '.'));
+};

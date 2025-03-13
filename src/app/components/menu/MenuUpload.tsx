@@ -2,7 +2,7 @@
 
 import { getMenuObject, getProducts, IMenuObj } from "../../lib/menu-table-parser";
 import FileUpload from "../FileUpload";
-import { read, utils } from "xlsx";
+import { read, utils } from "xlsx-js-style";
 
 interface MenuUploadProps {
     onMenuUpload: (file: IMenuObj | object) => void;

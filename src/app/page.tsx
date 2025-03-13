@@ -7,6 +7,7 @@ import MenuUpload from "./components/menu/MenuUpload";
 import { useState } from "react";
 import { IMenuObj } from "./lib/menu-table-parser";
 import MenuFullList from "./components/menu/MenuFullList";
+import { exportToExcel } from "./lib/exportToExcel";
 
 const Home: React.FC = () => {
   const [mainMenu, setMainManu] = useState({});
@@ -16,6 +17,12 @@ const Home: React.FC = () => {
   };
 
   const menuRemoveHandler = () => setMainManu({});
+
+  const data = [
+    { id: 1, name: 'Іван', age: 25 },
+    { id: 2, name: 'Марія', age: 30 },
+    { id: 3, name: 'Олександр', age: 22 }
+  ];
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -40,6 +47,13 @@ const Home: React.FC = () => {
           height={38}
           priority
         />
+
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={() => exportToExcel('Title TTPTPPTPT', data, 'Users.xlsx')}
+      >
+        Експортувати у Excel
+      </button>
 
         <MenuUpload onMenuUpload={menuUploadHandler} onMenuRemove={menuRemoveHandler} />
 

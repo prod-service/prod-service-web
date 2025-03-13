@@ -1,11 +1,8 @@
-import { getValueByKey } from "@/app/helpers";
+import { getValueByKey, parseToNum } from "@/app/helpers";
 import { IProduct } from "@/app/lib/menu-table-parser";
 import { useState, useEffect, ChangeEvent } from "react";
 import ProductListValues from "./ProductListValues";
-
-interface ICalcObj {
-    [dishName: string]: IProduct
-};
+import { calculateDishObect, ICalcObj } from "@/app/lib/dish-calculation";
 
 interface DishCalcProps {
     dishListObj: {
@@ -16,7 +13,7 @@ interface DishCalcProps {
 const DishCalc: React.FC<DishCalcProps> = ({ dishListObj }) => {
     const [dishList, setDishList] = useState<Array<string>>([]);
     const [calcObject, setCalcObjectList] = useState<ICalcObj>({});
-    const [countInput, setCountInput] = useState<number | string>('');
+    const [countInput, setCountInput] = useState<number | string>(1);
 
     const calcHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
@@ -29,45 +26,20 @@ const DishCalc: React.FC<DishCalcProps> = ({ dishListObj }) => {
     useEffect(() => {
         if (dishListObj) {
             setDishList(Object.keys(dishListObj));
-            setCalcObjectList(Object.assign(calcObject, dishListObj));
+            setCalcObjectList((prevData) => {
+                return {
+                    ...prevData,
+                    ...calculateDishObect(parseToNum(countInput), dishListObj)
+                }
+            });
         }
     }, [dishListObj]);
 
     useEffect(() => {
-        console.log(calcObject, dishListObj);
-        
-        let localCalcObj: ICalcObj = Object.assign({}, dishListObj);
-
-        const parseToNum = (str: string | number): number => {
-            if (typeof str === 'number') return str;
-            return Number(str.replaceAll(',', '.'));
-        };
-
-
-        if (parseToNum(countInput) > 0) {Object.keys(localCalcObj).forEach((dish) => {
-            console.log(dish);
-
-            Object.keys(getValueByKey(dish, localCalcObj)).forEach((prod) => {
-                const value = getValueByKey(prod, localCalcObj[dish]);
-                console.log(typeof value);
-                
-                const calcValue = parseToNum(value) * parseToNum(countInput);
-
-                localCalcObj = {
-                    ...localCalcObj,
-                    [dish]: {
-                        ...localCalcObj[dish],
-                        [prod]: calcValue / 1000 + ' кг'
-                    }
-                };
-            });
-        });}
-
-        // console.log(localCalcObj);
         setCalcObjectList((prevData) => {
             return {
                 ...prevData,
-                ...localCalcObj
+                ...calculateDishObect(parseToNum(countInput), dishListObj)
             }
         });
 
