@@ -9,12 +9,16 @@ export interface IProduct {
     [productKey: string]: string | number
 };
 
+export interface IDishObj {
+    [dishKey: string]: IProduct
+}
+
+export interface IMealObj {
+    [mealKey: string]: IDishObj
+}
+
 export interface IMenuObj {
-    [dayKey: string]: {
-        [mealKey: string]: {
-            [dishKey: string]: IProduct
-        }
-    }
+    [dayKey: string]: IMealObj
 };
 
 const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {

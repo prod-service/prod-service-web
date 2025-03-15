@@ -9,10 +9,7 @@ export const xsmFont = { ...defaultFont, sz: 10 };
 export const centerAlignH = { horizontal: 'center', wrapText: true };
 export const centerAlignVH = { vertical: 'center', horizontal: 'center', wrapText: true };
 export const leftAlignH = { horizontal: 'left', wrapText: true };
-export const defaultBorderStyle = {
-    style: 'thin',
-    color: { rgb: '000000' },
-};
+export const defaultBorderStyle = { style: 'thin', color: { rgb: '000000' } };
 
 export const addStylesToCells = (worksheet: XLSX.WorkSheet, formattedCells: any[]) => {
     formattedCells.forEach(({ cell, value, style }) => {

@@ -1,18 +1,17 @@
 import { getValueByKey, parseToNum } from "@/app/helpers";
-import { IProduct } from "@/app/lib/menu-table-parser";
+import { IDishObj, IProduct } from "@/app/lib/menu-table-parser";
 import { useState, useEffect, ChangeEvent } from "react";
 import ProductListValues from "./ProductListValues";
 import { calculateDishObect, ICalcObj } from "@/app/lib/dish-calculation";
 
 interface DishCalcProps {
-    dishListObj: {
-        [dishName: string]: IProduct
-    }
+    dishListObj: IDishObj,
+    onDishChange: (calcObj: IDishObj) => void
 }
 
-const DishCalc: React.FC<DishCalcProps> = ({ dishListObj }) => {
+const DishCalc: React.FC<DishCalcProps> = ({ dishListObj, onDishChange }) => {
     const [dishList, setDishList] = useState<Array<string>>([]);
-    const [calcObject, setCalcObjectList] = useState<ICalcObj>({});
+    const [calcObject, setCalcObjectList] = useState<IDishObj>({});
     const [countInput, setCountInput] = useState<number | string>(1);
 
     const calcHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,8 +41,11 @@ const DishCalc: React.FC<DishCalcProps> = ({ dishListObj }) => {
                 ...calculateDishObect(parseToNum(countInput), dishListObj)
             }
         });
-
     }, [countInput]);
+
+    useEffect(() => {
+        if (parseToNum(countInput) > 0) onDishChange(calcObject);
+    }, [calcObject]);
 
     if (!dishList.length) return <div>No list</div>;
     

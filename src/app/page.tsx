@@ -50,7 +50,7 @@ const Home: React.FC = () => {
 
       <button
         className="px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={() => exportToExcel('Title TTPTPPTPT', data, 'Users.xlsx')}
+        onClick={() => exportToExcel(data, 'Users.xlsx')}
       >
         Експортувати у Excel
       </button>

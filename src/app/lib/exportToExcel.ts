@@ -4,17 +4,8 @@ import { addBorderdsTable, addStylesToCells } from './excelHelper';
 import cellsInvoiceFormat from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
 
-interface invoiceData {
-    date: string,
-    numberPeople: number,
-    breakfastDishes: string[],
-    lunchDishes: string[],
-    dinnerDishes: string[],
-};
-
-
-export const exportToExcel = (headerText: string, data: any[], filename: string = 'export.xlsx') => {
-    const worksheet = XLSX.utils.aoa_to_sheet([[]]); // Порожній аркуш для редагування
+export const exportToExcel = (data: any[], filename: string = 'export.xlsx') => {
+    const worksheet = XLSX.utils.aoa_to_sheet([[]]);
 
     worksheet['!merges'] = [
         { s: { r: 0, c: 5 }, e: { r: 0, c: 9 } }, // 1 рядок (F1), 5-й стовпець (F) до 9-го (J)
