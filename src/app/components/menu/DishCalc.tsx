@@ -6,21 +6,22 @@ import { calculateDishObect, ICalcObj } from "@/app/lib/dish-calculation";
 
 interface DishCalcProps {
     dishListObj: IDishObj,
+    countInput: number | string,
     onDishChange: (calcObj: IDishObj) => void
 }
 
-const DishCalc: React.FC<DishCalcProps> = ({ dishListObj, onDishChange }) => {
+const DishCalc: React.FC<DishCalcProps> = ({ dishListObj, countInput, onDishChange }) => {
     const [dishList, setDishList] = useState<Array<string>>([]);
     const [calcObject, setCalcObjectList] = useState<IDishObj>({});
-    const [countInput, setCountInput] = useState<number | string>(1);
+    // const [countInput, setCountInput] = useState<number | string>(1);
 
-    const calcHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
+    // const calcHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    //     const { value } = e.target;
 
-        if (Number(value) < 1 || isNaN(Number(value))) {setCountInput(''); return e.preventDefault();}
+    //     if (Number(value) < 1 || isNaN(Number(value))) {setCountInput(''); return e.preventDefault();}
 
-        setCountInput(Number(value));
-    };
+    //     setCountInput(Number(value));
+    // };
 
     useEffect(() => {
         if (dishListObj) {
@@ -51,12 +52,12 @@ const DishCalc: React.FC<DishCalcProps> = ({ dishListObj, onDishChange }) => {
     
     return (
         <div>
-            <input
+            {/* <input
                 type="text"
                 value={countInput}
                 onChange={calcHandler}
                 className="border-2 rounded"
-            />
+            /> */}
             <ul>
                 { dishList.map((dish, idx) => {
                     return (

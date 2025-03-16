@@ -1,34 +1,41 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import DishCalc from "./DishCalc";
-import { IDishObj, IMealObj, IMenuObj, IProduct } from "@/app/lib/menu-table-parser";
+import { IDishObj, IMealObj } from "@/app/lib/menu-table-parser";
 import { getValueByKey } from "@/app/helpers";
-import { calculateTotalProducts, ICalcObj } from "@/app/lib/dish-calculation";
+import { parseIntoInvoice } from "@/app/lib/invoice-parser";
 
 interface MealFormProps {
-    originFormObj: {
-        [dishKey: string]: IProduct
-    }
+    originFormObj: IMealObj,
+    dayTitle?: string
 };
 
-const MealForm: React.FC<MealFormProps> = ({ originFormObj }) => {
+const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => {
     const [mealList, setMealList] = useState<Array<string>>([]);
+    const [countInput, setCountInput] = useState<number | string>(1);
     let calcObject: IMealObj = {};
-    
-    const dishHandler = (calcObj: IDishObj, mealName: string): void => { // ?
-        calcObject = { ...calcObject, [mealName]: calcObj };
+
+    const calcHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        if (Number(value) < 1 || isNaN(Number(value))) {setCountInput(''); return e.preventDefault();}
+        setCountInput(Number(value));
     };
-
-    // const setTotalCalc = (totalProducts: IProduct): IMealObj => ({ ...calcObject, 'total': totalProducts })
-
+    
     const setDishesInit = (mealList: string[]): void => {
         mealList.forEach((meal) => dishHandler(getValueByKey(meal, originFormObj), meal));
-    }
+    };
+
+    const dishHandler = (calcObj: IDishObj, mealName: string): void => {calcObject = { ...calcObject, [mealName]: calcObj }};
 
     const fileHandler = () => {
-        const result = calculateTotalProducts(calcObject)
+        const res = parseIntoInvoice({
+            dayTitle,
+            numberPeople: countInput,
+            inputData: calcObject,
+            singleData: originFormObj});
 
-        console.log(result);
-    }
+            console.log(res);
+            
+    };
 
     useEffect(() => {
         const meals = Object.keys(originFormObj);
@@ -39,12 +46,15 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj }) => {
 
     return (
         <div>
+            <h2 className="text-center text-lg font-bold">{ dayTitle }</h2>
+            <input type="text" value={countInput} onChange={calcHandler} className="border-2 rounded" />
             <ul className="md:grid md:gap-2 md:grid-cols-3 lg:grid-cols-3">
                 { mealList.map((meal, idx) => {
                     return <li key={idx}>
                         <strong>{meal}</strong>
                         <DishCalc
                             dishListObj={getValueByKey(meal, originFormObj)}
+                            countInput={countInput}
                             onDishChange={ (calcObj) => dishHandler(calcObj, meal)}
                         />
                     </li>
