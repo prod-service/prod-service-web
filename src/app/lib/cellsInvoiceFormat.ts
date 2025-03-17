@@ -1,5 +1,5 @@
 import { appendTitle, approve, approveSign, breakfast, commanderConclusion, dinner, dishesName, doctorConclusion, emptyDate, forBreakfast, forBreakfastSign, forBreakfastSign2, forDinner, forDinnerSign, forLunch, forLunchSign, formatTitle, lunch, mainSubTitle, mainTitle, numTitle, perPerson, perTeam, productsName, productsPub, productsReceived, shouldBeIssued, signTable, total, underApproveSign, underApproveSign2, underSignTable } from "../dictionary";
-import { defaultFont, leftAlignH, centerAlignH, xsmFont, smFont, centerAlignVH, lgFont } from "./excelHelper";
+import { defaultFont, leftAlignH, centerAlignH, xsmFont, smFont, centerAlignVH, lgFont, defaultBorderStyle } from "./excelHelper";
 
 export default [
     {
@@ -135,7 +135,13 @@ export default [
         value: numTitle,
         style: { 
             font: defaultFont, 
-            alignment: centerAlignVH
+            alignment: centerAlignVH,
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -143,15 +149,27 @@ export default [
         value: productsName,
         style: { 
             font: defaultFont, 
-            alignment: centerAlignVH
+            alignment: centerAlignVH,
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
         cell: 'C24',
         value: shouldBeIssued,
         style: { 
-            font: defaultFont, 
-            alignment: centerAlignH
+            font: defaultFont,
+            alignment: centerAlignH,
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -183,7 +201,13 @@ export default [
         value: total,
         style: { 
             font: defaultFont, 
-            alignment: centerAlignVH
+            alignment: centerAlignVH,
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -191,7 +215,13 @@ export default [
         value: perPerson,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -199,7 +229,13 @@ export default [
         value: perTeam,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -207,7 +243,13 @@ export default [
         value: perPerson,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -215,7 +257,13 @@ export default [
         value: perTeam,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -223,7 +271,13 @@ export default [
         value: perPerson,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -231,7 +285,13 @@ export default [
         value: perTeam,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -239,7 +299,13 @@ export default [
         value: perPerson,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {
@@ -247,7 +313,13 @@ export default [
         value: perTeam,
         style: { 
             font: defaultFont, 
-            alignment: { ...centerAlignH, textRotation: 90}
+            alignment: { ...centerAlignH, textRotation: 90},
+            border: {
+                top: defaultBorderStyle,
+                bottom: defaultBorderStyle,
+                left: defaultBorderStyle,
+                right: defaultBorderStyle,
+            }
         }
     },
     {

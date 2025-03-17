@@ -8,7 +8,7 @@ export const underApproveSign2 = 'підпис, прізвище, ініціал
 export const emptyDate = '“____” ____________20__ року';
 export const mainTitle = 'РОЗКЛАДКА-НАКЛАДНА №_____';
 export const mainSubTitle = 'на видавання продуктів для приготування їжі';
-export const getMainTitleDesc = (count: string): string => `за нормою № 1 на ${count} осіб`;
+export const getMainTitleDesc = (count: string | number): string => `за нормою № 1 на ${count} осіб`;
 export const dishesName = 'Найменування страв:';
 export const forBreakfast = 'На сніданок';
 export const forLunch = 'На обід';

@@ -29,8 +29,8 @@ const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
                             <span className="font-bold">{day}</span>
                             <button onClick={openPopup} className="transition bg-indigo-500 hover:bg-indigo-400 p-1 rounded text-white">Open day</button>
                             <MenuSingleDay dayObject={getValueByKey(day, menuObject)} />
-                            <Popup isOpen={isPopupOpen} onClose={closePopup}>
-                                <MealCalcForm dayTitle={day} originFormObj={getValueByKey(day, menuObject)} />
+                            <Popup key={index} isOpen={isPopupOpen} onClose={closePopup}>
+                                <MealCalcForm key={index} dayTitle={day} originFormObj={getValueByKey(day, menuObject)} />
                             </Popup>
                         </li>
                     }) }

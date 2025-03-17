@@ -2,7 +2,10 @@ import { ChangeEvent, useEffect, useState } from "react";
 import DishCalc from "./DishCalc";
 import { IDishObj, IMealObj } from "@/app/lib/menu-table-parser";
 import { getValueByKey } from "@/app/helpers";
-import { parseIntoInvoice } from "@/app/lib/invoice-parser";
+import { IInvoiceData, parseIntoInvoice } from "@/app/lib/invoice-parser";
+import { exportToExcel } from "@/app/lib/exportToExcel";
+
+import * as XLSX from 'xlsx-js-style';
 
 interface MealFormProps {
     originFormObj: IMealObj,
@@ -27,14 +30,17 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
     const dishHandler = (calcObj: IDishObj, mealName: string): void => {calcObject = { ...calcObject, [mealName]: calcObj }};
 
     const fileHandler = () => {
-        const res = parseIntoInvoice({
+        const res: IInvoiceData = parseIntoInvoice({
             dayTitle,
             numberPeople: countInput,
             inputData: calcObject,
-            singleData: originFormObj});
+            singleData: originFormObj
+        });
 
-            console.log(res);
-            
+        // XLSX.utils.decode_range(range);
+        
+
+        exportToExcel(res, 'Розкладка-накладна '+dayTitle+'.xlsx');    
     };
 
     useEffect(() => {

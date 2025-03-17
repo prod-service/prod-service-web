@@ -1,12 +1,131 @@
 import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
-import { addBorderdsTable, addStylesToCells } from './excelHelper';
+import { addBorderdsTable, addStylesToCells, defaultFont, leftCenterAlignHV } from './excelHelper';
 import cellsInvoiceFormat from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
+import { IInvoiceData } from './invoice-parser';
 
-export const exportToExcel = (data: any[], filename: string = 'export.xlsx') => {
+const insertListIntoColumn = (worksheet: XLSX.WorkSheet, list: string[], colName: string, colStart: number): void => {
+    list.forEach((item, idx) => {
+        const cell = `${colName}${colStart + idx}`;
+        // XLSX.utils.sheet_add_aoa(worksheet, [[item]], { origin: cell })
+        worksheet[cell] = {
+            v: item,
+            s: { font: defaultFont, alignment: leftCenterAlignHV }
+        }
+    });
+};
+
+export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {
+    const { date, numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
+    // const defaultTableRows = 32;
+    // const shiftTableRow = products.length - defaultTableRows;
+    const dishListStart = 17;
+    const maxDishListLength = Math.max(breakfastDishes.length, lunchDishes.length, dinnerDishes.length);
+    const dishListEnd = dishListStart + maxDishListLength;
+    const tableRowStart = dishListEnd + 2 + 4;
+    const tableRowEnd = tableRowStart + products.length - 2;
+    const breakfastListRange = `B${dishListStart}:B${dishListEnd}`
+    const lunchListRange = `D${dishListStart}:D${dishListEnd}`
+    const dinnerListRange = `H${dishListStart}:H${dishListEnd}`
+
     const worksheet = XLSX.utils.aoa_to_sheet([[]]);
 
+
+    worksheet['!cols'] = [
+        { wch: 8.11 },
+        { wch: 30.80 },
+        { wch: 7.13 },
+        { wch: 10.43 },
+        { wch: 7.13 },
+        { wch: 10.43 },
+        { wch: 7.13 },
+        { wch: 10.43 },
+        { wch: 7.13 },
+        { wch: 10.43 }
+    ]; 
+    worksheet['!rows'] = [
+        { hpt: 73 },
+        {},
+        { hpx: 17 },
+        { hpx: 17 },
+        { hpx: 11 },
+        { hpx: 17 },
+        { hpx: 11 },
+        { hpx: 14 },
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}, // На обід/сніданок/вечерю [15]
+        // {}, // динамічний список [16]
+        // {}, // динамічний список
+        // {}, // динамічний список
+        // {}, // динамічний список
+        // {}, // динамічний список [20]
+        {},
+        {},
+        {}, // [23] таблиця початок
+        {},
+        {},
+        { hpx: 101 }, 
+        // {}, // table content start [27] [28 row]
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {},
+        // {}, // table end [56]
+        {},
+        { hpx: 17 },
+        { hpx: 13 },
+        { hpx: 17 },
+        { hpx: 13 },
+        { hpx: 17 },
+        { hpx: 17 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        {},
+        {},
+        {},
+        { hpx: 60 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+    ];
     worksheet['!merges'] = [
         { s: { r: 0, c: 5 }, e: { r: 0, c: 9 } }, // 1 рядок (F1), 5-й стовпець (F) до 9-го (J)
         { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } },   
@@ -21,18 +140,22 @@ export const exportToExcel = (data: any[], filename: string = 'export.xlsx') => 
         { s: { r: 11, c: 0 }, e: { r: 11, c: 9 } },
         { s: { r: 12, c: 0 }, e: { r: 12, c: 9 } },
         { s: { r: 14, c: 0 }, e: { r: 14, c: 9 } },
-        { s: { r: 15, c: 3 }, e: { r: 15, c: 5 } },
-        { s: { r: 16, c: 3 }, e: { r: 16, c: 5 } },
-        { s: { r: 17, c: 3 }, e: { r: 17, c: 5 } },
-        { s: { r: 18, c: 3 }, e: { r: 18, c: 5 } },
-        { s: { r: 19, c: 3 }, e: { r: 19, c: 5 } },
-        { s: { r: 20, c: 3 }, e: { r: 20, c: 5 } },
-        { s: { r: 15, c: 7 }, e: { r: 15, c: 9 } },
-        { s: { r: 16, c: 7 }, e: { r: 16, c: 9 } },
-        { s: { r: 17, c: 7 }, e: { r: 17, c: 9 } },
-        { s: { r: 18, c: 7 }, e: { r: 18, c: 9 } },
-        { s: { r: 19, c: 7 }, e: { r: 19, c: 9 } },
-        { s: { r: 20, c: 7 }, e: { r: 20, c: 9 } },
+        
+        { s: { r: 15, c: 3 }, e: { r: 15, c: 5 } }, // Dishes lists title
+        // Dishes lists
+        // { s: { r: 16, c: 3 }, e: { r: 16, c: 5 } },
+        // { s: { r: 17, c: 3 }, e: { r: 17, c: 5 } },
+        // { s: { r: 18, c: 3 }, e: { r: 18, c: 5 } },
+        // { s: { r: 19, c: 3 }, e: { r: 19, c: 5 } },
+        // { s: { r: 20, c: 3 }, e: { r: 20, c: 5 } },
+
+        { s: { r: 15, c: 7 }, e: { r: 15, c: 9 } }, // Dishes lists title
+        // Dishes lists
+        // { s: { r: 16, c: 7 }, e: { r: 16, c: 9 } },
+        // { s: { r: 17, c: 7 }, e: { r: 17, c: 9 } },
+        // { s: { r: 18, c: 7 }, e: { r: 18, c: 9 } },
+        // { s: { r: 19, c: 7 }, e: { r: 19, c: 9 } },
+        // { s: { r: 20, c: 7 }, e: { r: 20, c: 9 } },
         // Table start
         { s: { r: 23, c: 0 }, e: { r: 26, c: 0 } },
         { s: { r: 23, c: 1 }, e: { r: 26, c: 1 } },
@@ -80,110 +203,35 @@ export const exportToExcel = (data: any[], filename: string = 'export.xlsx') => 
         { s: { r: 79, c: 1 }, e: { r: 79, c: 3 } },
         { s: { r: 79, c: 5 }, e: { r: 79, c: 9 } },
     ];
-    worksheet['!cols'] = [
-        { wch: 8.11 },
-        { wch: 30.80 },
-        { wch: 7.13 },
-        { wch: 10.43 },
-        { wch: 7.13 },
-        { wch: 10.43 },
-        { wch: 7.13 },
-        { wch: 10.43 },
-        { wch: 7.13 },
-        { wch: 10.43 }
-    ]; 
-    worksheet['!rows'] = [
-        { hpt: 73 },
-        {},
-        { hpx: 17 },
-        { hpx: 17 },
-        { hpx: 11 },
-        { hpx: 17 },
-        { hpx: 11 },
-        { hpx: 14 },
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}, // На обід/сніданок/вечерю [15]
-        {}, // динамічний список [16]
-        {}, // динамічний список
-        {}, // динамічний список
-        {}, // динамічний список
-        {}, // динамічний список [20]
-        {},
-        {},
-        {}, // [23] таблиця початок
-        {},
-        {},
-        { hpx: 101 }, 
-        {}, // table content start [27]
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}, // table end [56]
-        {},
-        { hpx: 17 },
-        { hpx: 13 },
-        { hpx: 17 },
-        { hpx: 13 },
-        { hpx: 17 },
-        { hpx: 17 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        {},
-        {},
-        {},
-        { hpx: 60 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-    ];
 
-    XLSX.utils.sheet_add_aoa(worksheet, [[getMainTitleDesc('10')]], { origin: 'A13' }); // dynamic cell
+    for (let indexList = 0; indexList < maxDishListLength; indexList++) {
+        const rowIndex = dishListStart-1+indexList;
+        if (worksheet['!rows']) worksheet['!rows'].splice(rowIndex, 0, {});
+        worksheet['!merges'].push(
+            { s: { r: dishListStart+indexList, c: 3 }, e: { r: dishListStart+indexList, c: 5 } },
+            { s: { r: dishListStart+indexList, c: 7 }, e: { r: dishListStart+indexList, c: 9 } },
+        );
+    }
+
+    insertListIntoColumn(worksheet, breakfastDishes, 'B', dishListStart+1);
+    insertListIntoColumn(worksheet, lunchDishes, 'D', dishListStart+1);
+    insertListIntoColumn(worksheet, dinnerDishes, 'H', dishListStart+1);
+
+    // Set rows for main table
+    products.forEach((p, idx) => {
+        if (worksheet['!rows']) worksheet['!rows'].splice(tableRowStart+idx, 0, {});
+    });
+
+
+    XLSX.utils.sheet_add_aoa(worksheet, [[getMainTitleDesc(numberPeople)]], { origin: 'A13' }); // dynamic cell
     
     // Data insert
-    XLSX.utils.sheet_add_json(worksheet, data, { origin: 'A28' });
+    XLSX.utils.sheet_add_json(worksheet, products, { skipHeader: true, origin: `B${tableRowStart}` });
     
     // find last row and col
-    const lastRow = 28 + data.length;
-    const lastCol = Object.keys(data[0]).length - 1;
-    const range = `A24:${XLSX.utils.encode_col(lastCol)}${lastRow}`;
+    const lastRow = tableRowEnd;
+    const lastCol = Object.keys(products[0]).length - 1;
+    const range = `A${tableRowStart-3}:${XLSX.utils.encode_col(lastCol+1)}${lastRow}`;
 
     // boreders for table
     addBorderdsTable(worksheet, range);

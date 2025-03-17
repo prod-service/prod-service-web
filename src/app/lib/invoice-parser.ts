@@ -15,9 +15,9 @@ interface ISingleProductRow {
     perTeamTotal: string | number,
 }
 
-interface IInvoiceData {
+export interface IInvoiceData {
     date: string,
-    numberPeople: number,
+    numberPeople: number | string,
     breakfastDishes: string[],
     lunchDishes: string[],
     dinnerDishes: string[],
@@ -26,7 +26,7 @@ interface IInvoiceData {
 
 interface IParseProps {
     dayTitle: string,
-    numberPeople: string | number,
+    numberPeople: number | string,
     inputData: IMealObj,
     singleData: IMealObj
 };
@@ -40,8 +40,7 @@ const getProductValueInDishes = (product: string, dish: IDishObj): number => {
     }, 0)
 };
 
-export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData }: IParseProps): IInvoiceData | object => {
-    let localCalcObj: IInvoiceData | object = {};
+export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData }: IParseProps): IInvoiceData => {
     const totalPerTeam: IProduct = calculateTotalProducts(inputData);
     const totalPerPerson: IProduct = calculateTotalProducts(singleData);
     const date: string = findDateStr(dayTitle);
@@ -66,15 +65,12 @@ export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData
         }
     });
 
-    localCalcObj = {
-        ...localCalcObj,
-        date, numberPeople,
+    return {
+        date: date,
+        numberPeople: numberPeople,
         breakfastDishes: Object.keys(teamBreakfast),
         lunchDishes: Object.keys(teamLunch),
         dinnerDishes: Object.keys(teamDinner),
         products: singleProductsList
     }
-
-    return localCalcObj;
-    
 };
