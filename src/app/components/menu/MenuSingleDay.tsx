@@ -25,7 +25,7 @@ const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
                 <ul>
                     { mealList.map((day, index) => {
                         return <li key={index}>
-                            <span>{day}</span>
+                            <span className="capitalize">{day}</span>
                             <ul className="ml-5 md:ml-8">
                                 {day.length > 0 && getDishList(day).map((dish, dishIndex) => {
                                     return (
@@ -33,8 +33,6 @@ const MenuSingleDay: React.FC<ManuSingleDayProps> = ({ dayObject }) => {
                                     );
                                 })}
                             </ul>
-
-                            
                         </li>
                     }) }
                 </ul>

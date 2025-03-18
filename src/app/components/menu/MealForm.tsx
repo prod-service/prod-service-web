@@ -49,12 +49,12 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
         <div>
             <h2 className="text-center text-lg font-bold">{ dayTitle }</h2>
             <div className="text-center">
-                <label>Кількість о/с: <input type="text" value={countInput} onChange={calcHandler} className="border-2 rounded p-1" /></label>
+                <label>Кількість о/с: <input type="text" value={countInput} onChange={calcHandler} className="border-2 border-blue-500 rounded p-1" /></label>
             </div>
-            <ul className="md:grid md:gap-2 md:grid-cols-3 lg:grid-cols-3">
+            <ul className="md:grid md:gap-2 md:grid-cols-3 lg:grid-cols-3 mb-3">
                 { mealList.map((meal, idx) => {
                     return <li key={idx}>
-                        <p className="capitalize border-b-2">{meal}</p>
+                        <h3 className="text-lg capitalize border-b-2 border-blue-200">{meal}</h3>
                         <DishCalc
                             dishListObj={getValueByKey(meal, originFormObj)}
                             countInput={countInput}
@@ -63,7 +63,7 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
                     </li>
                 }) }
             </ul>
-            <button className="bg-green-500 text-white p-2 rounded" onClick={fileHandler}>Get file</button>
+            <button className="bg-green-500 text-white p-2 rounded w-full md:w-auto" onClick={fileHandler}>Зберегти файл Excel</button>
         </div>
     );
 };

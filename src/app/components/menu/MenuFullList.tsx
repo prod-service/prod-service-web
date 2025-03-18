@@ -34,8 +34,12 @@ const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
                 <ul className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3">
                     { dayList.map(({ name, popupOpened }, index) => {
                         return <li key={index} className="p-2 md:p-4 mb-4 border-2">
-                            <span className="font-bold">{name}</span>
-                            <button onClick={() => togglePopup(index, true)} className="transition bg-indigo-500 hover:bg-indigo-400 p-1 rounded text-white">Open day</button>
+                            <div className="flex justify-between">
+                                <span className="font-bold mr-2">{name}</span>
+                                <button onClick={() => togglePopup(index, true)} className="transition bg-indigo-500 hover:bg-indigo-400 py-1 px-2 rounded text-white">
+                                    Відкрити
+                                </button>
+                            </div>
                             <MenuSingleDay dayObject={getValueByKey(name, menuObject)} />
                             <Popup key={index} isOpen={popupOpened} onClose={() => togglePopup(index, false)}>
                                 <MealCalcForm dayTitle={name} originFormObj={getValueByKey(name, menuObject)} />

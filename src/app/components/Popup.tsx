@@ -15,15 +15,16 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, children }) => {
             onClick={onClose}
         >
             <div
-                className="bg-white p-6 rounded-lg shadow-lg md:w-5/6 overflow-y-auto h-full"
+                className="relative bg-white p-6 rounded-lg shadow-lg md:w-5/6 overflow-y-auto h-full"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="mb-2">{children}</div>
+                <div className="mb-2 pt-5 md:pt-0">{children}</div>
+                <button className="bg-red-500 text-white p-2 rounded w-full md:w-auto" onClick={onClose}>Закрити</button>
                 <button
-                    className="bg-red-500 text-white p-2 rounded"
+                    className="absolute top-2 right-2 md:top-5 md:right-5 bg-red-500 text-white p-2 rounded w-10 h-10 rounded-full"
                     onClick={onClose}
                 >
-                    Close
+                    X
                 </button>
             </div>
         </div>
