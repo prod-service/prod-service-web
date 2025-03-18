@@ -5,8 +5,6 @@ import { getValueByKey } from "@/app/helpers";
 import { IInvoiceData, parseIntoInvoice } from "@/app/lib/invoice-parser";
 import { exportToExcel } from "@/app/lib/exportToExcel";
 
-import * as XLSX from 'xlsx-js-style';
-
 interface MealFormProps {
     originFormObj: IMealObj,
     dayTitle?: string
@@ -37,9 +35,6 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
             singleData: originFormObj
         });
 
-        // XLSX.utils.decode_range(range);
-        
-
         exportToExcel(res, 'Розкладка-накладна '+dayTitle+'.xlsx');    
     };
 
@@ -53,11 +48,13 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
     return (
         <div>
             <h2 className="text-center text-lg font-bold">{ dayTitle }</h2>
-            <input type="text" value={countInput} onChange={calcHandler} className="border-2 rounded" />
+            <div className="text-center">
+                <label>Кількість о/с: <input type="text" value={countInput} onChange={calcHandler} className="border-2 rounded p-1" /></label>
+            </div>
             <ul className="md:grid md:gap-2 md:grid-cols-3 lg:grid-cols-3">
                 { mealList.map((meal, idx) => {
                     return <li key={idx}>
-                        <strong>{meal}</strong>
+                        <p className="capitalize border-b-2">{meal}</p>
                         <DishCalc
                             dishListObj={getValueByKey(meal, originFormObj)}
                             countInput={countInput}

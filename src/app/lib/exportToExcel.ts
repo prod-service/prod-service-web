@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
-import { addBorderdsTable, addStylesToCells, defaultFont, leftCenterAlignHV } from './excelHelper';
+import { addBorderdsTable, addStylesToCells, centerAlignH, defaultFont, leftCenterAlignHV, smFont } from './excelHelper';
 import cellsInvoiceFormat from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
 import { IInvoiceData } from './invoice-parser';
@@ -17,19 +17,58 @@ const insertListIntoColumn = (worksheet: XLSX.WorkSheet, list: string[], colName
 };
 
 export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {
+    const worksheet = XLSX.utils.aoa_to_sheet([[]]);
     const { date, numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
     // const defaultTableRows = 32;
     // const shiftTableRow = products.length - defaultTableRows;
     const dishListStart = 17;
     const maxDishListLength = Math.max(breakfastDishes.length, lunchDishes.length, dinnerDishes.length);
-    const dishListEnd = dishListStart + maxDishListLength;
-    const tableRowStart = dishListEnd + 2 + 4;
-    const tableRowEnd = tableRowStart + products.length - 2;
-    const breakfastListRange = `B${dishListStart}:B${dishListEnd}`
-    const lunchListRange = `D${dishListStart}:D${dishListEnd}`
-    const dinnerListRange = `H${dishListStart}:H${dishListEnd}`
-
-    const worksheet = XLSX.utils.aoa_to_sheet([[]]);
+    const dishListEnd = dishListStart + maxDishListLength - 1;
+    const shiftBeforeTable = 1;
+    const shiftAfterTable = 1;
+    const tableRowStart = dishListEnd + 1 + shiftBeforeTable;
+    const tableTitlesRows = [{}, {}, {}, { hpx: 101 }];
+    const tableDataStart = tableRowStart + tableTitlesRows.length;
+    const tableRowEnd = tableDataStart + products.length - 1;
+    
+    const signsAfterTableRows = [
+        { hpx: 17 },
+        { hpx: 13 },
+        { hpx: 17 },
+        { hpx: 13 },
+        { hpx: 17 },
+        { hpx: 17 },
+    ];
+    
+    const productsPubReceivedRows = [
+        { hpx: 17 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+    ];
+    
+    const conclusionsRows = [
+        { hpx: 60 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+        { hpx: 25 },
+    ];
+    
+    console.log(
+        'dishListStart', dishListStart, '\b',
+        'maxDishListLength', maxDishListLength, '\b',
+        'dishListEnd', dishListEnd, '\b',
+        'tableRowStart', tableRowStart,'\b',
+        'tableRowEnd', tableRowEnd,'\b',
+        'tableDataStart', tableDataStart,'\b',
+    );
+    
 
 
     worksheet['!cols'] = [
@@ -61,17 +100,18 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         {},
         {},
         {}, // На обід/сніданок/вечерю [15]
+        {},
         // {}, // динамічний список [16]
         // {}, // динамічний список
         // {}, // динамічний список
         // {}, // динамічний список
         // {}, // динамічний список [20]
-        {},
-        {},
-        {}, // [23] таблиця початок
-        {},
-        {},
-        { hpx: 101 }, 
+        // {},
+        // {},
+        // {}, // [23] таблиця початок
+        // {},
+        // {},
+        // { hpx: 101 }, 
         // {}, // table content start [27] [28 row]
         // {},
         // {},
@@ -102,30 +142,32 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         // {},
         // {},
         // {}, // table end [56]
-        {},
-        { hpx: 17 },
-        { hpx: 13 },
-        { hpx: 17 },
-        { hpx: 13 },
-        { hpx: 17 },
-        { hpx: 17 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        {},
-        {},
-        {},
-        { hpx: 60 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
-        { hpx: 25 },
+        // {},
+        // { hpx: 17 },
+        // { hpx: 13 },
+        // { hpx: 17 },
+        // { hpx: 13 },
+        // { hpx: 17 },
+        // { hpx: 17 },
+        
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // {},
+        // {},
+        // {},
+        // { hpx: 60 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
+        // { hpx: 25 },
     ];
+    // should be dynamic
     worksheet['!merges'] = [
         { s: { r: 0, c: 5 }, e: { r: 0, c: 9 } }, // 1 рядок (F1), 5-й стовпець (F) до 9-го (J)
         { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } },   
@@ -157,55 +199,56 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         // { s: { r: 19, c: 7 }, e: { r: 19, c: 9 } },
         // { s: { r: 20, c: 7 }, e: { r: 20, c: 9 } },
         // Table start
-        { s: { r: 23, c: 0 }, e: { r: 26, c: 0 } },
-        { s: { r: 23, c: 1 }, e: { r: 26, c: 1 } },
-        { s: { r: 23, c: 2 }, e: { r: 23, c: 9 } },
-        { s: { r: 24, c: 2 }, e: { r: 25, c: 3 } },
-        { s: { r: 24, c: 4 }, e: { r: 25, c: 5 } },
-        { s: { r: 24, c: 6 }, e: { r: 25, c: 7 } },
-        { s: { r: 24, c: 8 }, e: { r: 25, c: 9 } },
+        { s: { r: tableRowStart, c: 0 }, e: { r: tableRowStart+3, c: 0 } },
+        { s: { r: tableRowStart, c: 1 }, e: { r: tableRowStart+3, c: 1 } },
+        { s: { r: tableRowStart, c: 2 }, e: { r: tableRowStart, c: 9 } },
+        { s: { r: tableRowStart+1, c: 2 }, e: { r: tableRowStart+2, c: 3 } },
+        { s: { r: tableRowStart+1, c: 4 }, e: { r: tableRowStart+2, c: 5 } },
+        { s: { r: tableRowStart+1, c: 6 }, e: { r: tableRowStart+2, c: 7 } },
+        { s: { r: tableRowStart+1, c: 8 }, e: { r: tableRowStart+2, c: 9 } },
+        // 25 end of titles
         // Table end
-        { s: { r: 58, c: 0 }, e: { r: 58, c: 9 } },
-        { s: { r: 59, c: 0 }, e: { r: 59, c: 9 } },
-        { s: { r: 60, c: 0 }, e: { r: 60, c: 9 } },
-        { s: { r: 61, c: 0 }, e: { r: 61, c: 9 } },
+        { s: { r: tableRowEnd+2, c: 0 }, e: { r: tableRowEnd+2, c: 9 } },
+        { s: { r: tableRowEnd+3, c: 0 }, e: { r: tableRowEnd+3, c: 9 } },
+        { s: { r: tableRowEnd+4, c: 0 }, e: { r: tableRowEnd+4, c: 9 } },
+        { s: { r: tableRowEnd+5, c: 0 }, e: { r: tableRowEnd+5, c: 9 } }, // 61
         
-        { s: { r: 62, c: 0 }, e: { r: 62, c: 3 } },
-        { s: { r: 62, c: 5 }, e: { r: 62, c: 9 } },
-        { s: { r: 63, c: 0 }, e: { r: 63, c: 3 } },
-        { s: { r: 63, c: 5 }, e: { r: 63, c: 9 } },
-        { s: { r: 64, c: 1 }, e: { r: 64, c: 3 } },
-        { s: { r: 64, c: 5 }, e: { r: 64, c: 9 } },
-        { s: { r: 65, c: 1 }, e: { r: 65, c: 3 } },
-        { s: { r: 65, c: 5 }, e: { r: 65, c: 9 } },
-        { s: { r: 66, c: 1 }, e: { r: 66, c: 3 } },
-        { s: { r: 66, c: 5 }, e: { r: 66, c: 9 } },
-        { s: { r: 67, c: 1 }, e: { r: 67, c: 3 } },
-        { s: { r: 67, c: 5 }, e: { r: 67, c: 9 } },
-        { s: { r: 68, c: 1 }, e: { r: 68, c: 3 } },
-        { s: { r: 68, c: 5 }, e: { r: 68, c: 9 } },
-        { s: { r: 69, c: 1 }, e: { r: 69, c: 3 } },
-        { s: { r: 69, c: 5 }, e: { r: 69, c: 9 } },
-        { s: { r: 72, c: 1 }, e: { r: 72, c: 3 } },
-        { s: { r: 72, c: 5 }, e: { r: 72, c: 9 } },
-        { s: { r: 73, c: 1 }, e: { r: 73, c: 3 } },
-        { s: { r: 73, c: 5 }, e: { r: 73, c: 9 } },
-        { s: { r: 74, c: 1 }, e: { r: 74, c: 3 } },
-        { s: { r: 74, c: 5 }, e: { r: 74, c: 9 } },
-        { s: { r: 75, c: 1 }, e: { r: 75, c: 3 } },
-        { s: { r: 75, c: 5 }, e: { r: 75, c: 9 } },
-        { s: { r: 76, c: 1 }, e: { r: 76, c: 3 } },
-        { s: { r: 76, c: 5 }, e: { r: 76, c: 9 } },
-        { s: { r: 77, c: 1 }, e: { r: 77, c: 3 } },
-        { s: { r: 77, c: 5 }, e: { r: 77, c: 9 } },
-        { s: { r: 78, c: 1 }, e: { r: 78, c: 3 } },
-        { s: { r: 78, c: 5 }, e: { r: 78, c: 9 } },
-        { s: { r: 79, c: 1 }, e: { r: 79, c: 3 } },
-        { s: { r: 79, c: 5 }, e: { r: 79, c: 9 } },
+        { s: { r: tableRowEnd+6, c: 0 }, e: { r: tableRowEnd+6, c: 3 } },
+        { s: { r: tableRowEnd+6, c: 5 }, e: { r: tableRowEnd+6, c: 9 } }, // 62
+        { s: { r: tableRowEnd+7, c: 0 }, e: { r: tableRowEnd+7, c: 3 } }, // 63
+        { s: { r: tableRowEnd+7, c: 5 }, e: { r: tableRowEnd+7, c: 9 } }, // 63
+        { s: { r: tableRowEnd+8, c: 1 }, e: { r: tableRowEnd+8, c: 3 } }, // 64
+        { s: { r: tableRowEnd+8, c: 5 }, e: { r: tableRowEnd+8, c: 9 } }, // 64
+        { s: { r: tableRowEnd+9, c: 1 }, e: { r: tableRowEnd+9, c: 3 } },
+        { s: { r: tableRowEnd+9, c: 5 }, e: { r: tableRowEnd+9, c: 9 } }, // 65
+        { s: { r: tableRowEnd+10, c: 1 }, e: { r: tableRowEnd+10, c: 3 } },
+        { s: { r: tableRowEnd+10, c: 5 }, e: { r: tableRowEnd+10, c: 9 } }, // 66
+        { s: { r: tableRowEnd+11, c: 1 }, e: { r: tableRowEnd+11, c: 3 } },
+        { s: { r: tableRowEnd+11, c: 5 }, e: { r: tableRowEnd+11, c: 9 } }, // 67
+        { s: { r: tableRowEnd+12, c: 1 }, e: { r: tableRowEnd+12, c: 3 } },
+        { s: { r: tableRowEnd+12, c: 5 }, e: { r: tableRowEnd+12, c: 9 } }, // 68
+        { s: { r: tableRowEnd+13, c: 1 }, e: { r: tableRowEnd+13, c: 3 } },
+        { s: { r: tableRowEnd+13, c: 5 }, e: { r: tableRowEnd+13, c: 9 } }, // 69
+        // { s: { r: tableRowEnd+14, c: 1 }, e: { r: tableRowEnd+14, c: 3 } },
+        // { s: { r: tableRowEnd+14, c: 5 }, e: { r: tableRowEnd+14, c: 9 } }, // 70
+        { s: { r: tableRowEnd+16, c: 1 }, e: { r: tableRowEnd+16, c: 3 } },
+        { s: { r: tableRowEnd+16, c: 5 }, e: { r: tableRowEnd+16, c: 9 } }, // 73
+        { s: { r: tableRowEnd+17, c: 1 }, e: { r: tableRowEnd+17, c: 3 } },
+        { s: { r: tableRowEnd+17, c: 5 }, e: { r: tableRowEnd+17, c: 9 } }, // 74
+        { s: { r: tableRowEnd+18, c: 1 }, e: { r: tableRowEnd+18, c: 3 } },
+        { s: { r: tableRowEnd+18, c: 5 }, e: { r: tableRowEnd+18, c: 9 } }, // 75
+        { s: { r: tableRowEnd+19, c: 1 }, e: { r: tableRowEnd+19, c: 3 } },
+        { s: { r: tableRowEnd+19, c: 5 }, e: { r: tableRowEnd+19, c: 9 } }, // 76
+        { s: { r: tableRowEnd+20, c: 1 }, e: { r: tableRowEnd+20, c: 3 } },
+        { s: { r: tableRowEnd+20, c: 5 }, e: { r: tableRowEnd+20, c: 9 } }, // 77
+        { s: { r: tableRowEnd+21, c: 1 }, e: { r: tableRowEnd+21, c: 3 } },
+        { s: { r: tableRowEnd+21, c: 5 }, e: { r: tableRowEnd+21, c: 9 } }, // 78
+        { s: { r: tableRowEnd+22, c: 1 }, e: { r: tableRowEnd+22, c: 3 } },
+        { s: { r: tableRowEnd+22, c: 5 }, e: { r: tableRowEnd+22, c: 9 } }, // 79
     ];
 
     for (let indexList = 0; indexList < maxDishListLength; indexList++) {
-        const rowIndex = dishListStart-1+indexList;
+        const rowIndex = dishListStart+indexList;
         if (worksheet['!rows']) worksheet['!rows'].splice(rowIndex, 0, {});
         worksheet['!merges'].push(
             { s: { r: dishListStart+indexList, c: 3 }, e: { r: dishListStart+indexList, c: 5 } },
@@ -221,22 +264,51 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
     products.forEach((p, idx) => {
         if (worksheet['!rows']) worksheet['!rows'].splice(tableRowStart+idx, 0, {});
     });
-
-
-    XLSX.utils.sheet_add_aoa(worksheet, [[getMainTitleDesc(numberPeople)]], { origin: 'A13' }); // dynamic cell
+    // Add space for table titles
+    if (worksheet['!rows']) worksheet['!rows'].splice(tableRowStart, 0, ...tableTitlesRows);
+    
+    // Add dynamic field
+    XLSX.utils.sheet_add_aoa(worksheet, [[getMainTitleDesc(numberPeople)]], { origin: 'A13', cellStyles: true }); // dynamic cell
+    worksheet['A13'].s = { font: smFont, alignment: centerAlignH };
     
     // Data insert
-    XLSX.utils.sheet_add_json(worksheet, products, { skipHeader: true, origin: `B${tableRowStart}` });
+    XLSX.utils.sheet_add_json(worksheet, products, { skipHeader: true, origin: `A${tableDataStart+1}` });
     
     // find last row and col
-    const lastRow = tableRowEnd;
+    const lastRow = tableRowEnd + 1;
     const lastCol = Object.keys(products[0]).length - 1;
-    const range = `A${tableRowStart-3}:${XLSX.utils.encode_col(lastCol+1)}${lastRow}`;
+    const range = `A${tableRowStart + 1}:${XLSX.utils.encode_col(lastCol + 1)}${lastRow}`;
+    
+    // Add space for after table
+    if (worksheet['!rows']) worksheet['!rows'].splice(
+        tableRowEnd + shiftAfterTable + 2,
+        0,
+        {},
+        ...signsAfterTableRows,
+        ...productsPubReceivedRows,
+        {}, {},
+        ...conclusionsRows 
+    );
+    // if (worksheet['!rows']) worksheet['!rows'].splice(
+    //     tableRowEnd + shiftAfterTable + 1 + signsAfterTableRows.length,
+    //     0,
+    //     ...productsPubReceivedRows
+    // );
+    // if (worksheet['!rows']) worksheet['!rows'].splice(
+    //     tableRowEnd + shiftAfterTable + 1
+    //     , 0, {}, {}
+    // );
+    // if (worksheet['!rows']) worksheet['!rows'].splice(
+    //     tableRowEnd + shiftAfterTable + 1,
+    //     0,
+    //     ...conclusionsRows
+    // );
+    
 
     // boreders for table
     addBorderdsTable(worksheet, range);
 
-    addStylesToCells(worksheet, cellsInvoiceFormat);
+    addStylesToCells(worksheet, cellsInvoiceFormat({ tableRowStartIndex: tableRowStart, tableRowEndIndex: tableRowEnd }));
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');

@@ -4,6 +4,7 @@ import { calculateTotalProducts } from "./dish-calculation";
 import { IDishObj, IMealObj, IProduct } from "./menu-table-parser";
 
 interface ISingleProductRow {
+    number: number,
     name: string,
     perPersonBreakfast: string | number,
     perTeamBreakfast: string | number,
@@ -51,8 +52,9 @@ export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData
     const teamLunch = inputData[lunch];
     const teamDinner = inputData[dinner];
 
-    const singleProductsList = Object.keys(totalPerPerson).map((product) => {
+    const singleProductsList = Object.keys(totalPerPerson).map((product, idx) => {
         return {
+            number: idx + 1,
             name: product,
             perPersonBreakfast: getProductValueInDishes(product, personBreakfast),
             perTeamBreakfast: getProductValueInDishes(product, teamBreakfast),
@@ -69,6 +71,7 @@ export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData
         date: date,
         numberPeople: numberPeople,
         breakfastDishes: Object.keys(teamBreakfast),
+        // lunchDishes: ['aspdo', 'asd asd as asd ', 'asd as d', 'asdasdasd', '123qwe1e12e', '123123123'],
         lunchDishes: Object.keys(teamLunch),
         dinnerDishes: Object.keys(teamDinner),
         products: singleProductsList
