@@ -1,6 +1,6 @@
 'use client'
 
-import { getMenuObject, getProducts, IMenuObj } from "../../lib/menu-table-parser";
+import { addingFirstRowToExcelSheet, getMenuObject, getProducts, IMenuObj } from "../../lib/menu-table-parser";
 import FileUpload from "../FileUpload";
 import { read, utils } from "xlsx-js-style";
 
@@ -17,11 +17,13 @@ const MenuUpload: React.FC<MenuUploadProps> = ({ inputFileName, onMenuUpload, on
         reader.onload = (event) => {
             const workbook = read(event.target?.result);
             const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-            const sheetData = utils.sheet_to_json(sheet);
-    
-            console.log(sheetData);
+            let sheet = workbook.Sheets[sheetName];
             
+            if (sheet['A1']) {
+                sheet = addingFirstRowToExcelSheet(sheet);
+            }
+            
+            const sheetData = utils.sheet_to_json(sheet);
             const productsList = getProducts(sheetData)
             const menu = getMenuObject(sheetData.slice(3), productsList);
 

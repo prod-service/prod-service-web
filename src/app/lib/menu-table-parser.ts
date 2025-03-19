@@ -1,3 +1,4 @@
+import { WorkSheet } from "xlsx-js-style";
 import { countByItems, mealNames } from "../consts";
 import { getValueByKey } from "../helpers";
 
@@ -38,6 +39,25 @@ const getMealName = (mealName: string): string => {
     const defaultValue = '';
     if (typeof mealName !== 'string') return defaultValue;
     return mealNames.find(n => n === mealName.toLocaleLowerCase().trim()) || defaultValue;
+};
+
+const getNumberFromStr = (input: string): number | null => {
+    const match = input.match(/\d+/); // find numbers
+    return match ? parseInt(match[0], 10) : null;
+};
+
+const replaceAllNumbers = (input: string, newNumber: number): string => {
+  return input.replace(/\d+/g, newNumber.toString()); // Замінюємо всі числа
+};
+
+export const addingFirstRowToExcelSheet = (sheet: WorkSheet): WorkSheet => {
+    return Object.keys(sheet).reduce((prev, cellAddress) => {
+        const cellNumber = getNumberFromStr(cellAddress);
+        const cellValue = getValueByKey(cellAddress, sheet);
+        const newCellAddress = cellNumber ? replaceAllNumbers(cellAddress, cellNumber+1) : cellAddress;
+
+        return { ...prev, [newCellAddress]: cellValue };
+    }, {});
 };
 
 export const getProductByCountItem = (product: string): string => {
