@@ -1,4 +1,4 @@
-import { countByItems, mealDishesSymbols, mealNames } from "../consts";
+import { countByItems, mealNames } from "../consts";
 import { getValueByKey } from "../helpers";
 
 interface IRawTableData {

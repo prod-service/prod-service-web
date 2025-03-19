@@ -18,7 +18,7 @@ const insertListIntoColumn = (worksheet: XLSX.WorkSheet, list: string[], colName
 
 export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {
     const worksheet = XLSX.utils.aoa_to_sheet([[]]);
-    const { date, numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
+    const { numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
     // const defaultTableRows = 32;
     // const shiftTableRow = products.length - defaultTableRows;
     const dishListStart = 17;

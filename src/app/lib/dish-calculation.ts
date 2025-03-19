@@ -1,6 +1,5 @@
-import { breakfastDishes, mealDishesSymbols } from "../consts";
 import { getValueByKey, numRound, parseToNum } from "../helpers";
-import { getProductByCountItem, IMealObj, IMenuObj, IProduct } from "./menu-table-parser";
+import { getProductByCountItem, IMealObj, IProduct } from "./menu-table-parser";
 
 export interface ICalcObj {
     [dishName: string]: IProduct

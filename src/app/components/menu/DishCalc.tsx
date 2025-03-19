@@ -1,8 +1,8 @@
 import { getValueByKey, parseToNum } from "@/app/helpers";
-import { IDishObj, IProduct } from "@/app/lib/menu-table-parser";
-import { useState, useEffect, ChangeEvent } from "react";
+import { IDishObj } from "@/app/lib/menu-table-parser";
+import { useState, useEffect } from "react";
 import ProductListValues from "./ProductListValues";
-import { calculateDishObect, ICalcObj } from "@/app/lib/dish-calculation";
+import { calculateDishObect } from "@/app/lib/dish-calculation";
 
 interface DishCalcProps {
     dishListObj: IDishObj,
