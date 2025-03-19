@@ -56,7 +56,7 @@ export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct |
 export const getMenuObject = (
     inputTable: IRawTableData[] | unknown[],
     productList: IProduct | object
-): IMenuObj | object => {
+): IMenuObj => {
     const dayKey = '__EMPTY';
     const mealKey = '__EMPTY_1';
     const dishKey = '__EMPTY_2';

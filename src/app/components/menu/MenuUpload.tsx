@@ -5,12 +5,13 @@ import FileUpload from "../FileUpload";
 import { read, utils } from "xlsx-js-style";
 
 interface MenuUploadProps {
-    onMenuUpload: (file: IMenuObj | object) => void;
+    inputFileName?: string,
+    onMenuUpload: (file: IMenuObj, name: string) => void;
     onMenuRemove: () => void;
 }
 
-const MenuUpload: React.FC<MenuUploadProps> = ({ onMenuUpload, onMenuRemove }) => {
-    const handlerUploading = (file: File) => {
+const MenuUpload: React.FC<MenuUploadProps> = ({ inputFileName, onMenuUpload, onMenuRemove }) => {
+    const handlerUploading = (file: File, name: string) => {
         const reader = new FileReader();
 
         reader.onload = (event) => {
@@ -22,7 +23,7 @@ const MenuUpload: React.FC<MenuUploadProps> = ({ onMenuUpload, onMenuRemove }) =
             const productsList = getProducts(sheetData)
             const menu = getMenuObject(sheetData.slice(3), productsList);
 
-            onMenuUpload(menu);
+            onMenuUpload(menu, name);
         }
 
         if (file instanceof Blob) reader.readAsArrayBuffer(file);
@@ -34,7 +35,7 @@ const MenuUpload: React.FC<MenuUploadProps> = ({ onMenuUpload, onMenuRemove }) =
 
     return(
         <div className="menu-upload">
-            <FileUpload title="Загрузити розкладку" onFileUpload={handlerUploading} onRemoveFile={handlerRemoveFile} />
+            <FileUpload title="Загрузити розкладку" inputFileName={inputFileName} onFileUpload={handlerUploading} onRemoveFile={handlerRemoveFile} />
         </div>
     );
 };

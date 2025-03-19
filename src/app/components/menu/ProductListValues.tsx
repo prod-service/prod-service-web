@@ -1,4 +1,4 @@
-import { getValueByKey } from "@/app/helpers";
+import { getValueByKey, numRound } from "@/app/helpers";
 import { IProduct } from "@/app/lib/menu-table-parser";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ const ProductListValues: React.FC<ProductListValuesProps> = ({ productListObj })
             { productList.length > 0 && productList.map((prod, idx) => {
                 return (
                     <li key={idx}>
-                        { prod } - { getValueByKey(prod, productListObj) } кг
+                        { prod } - { numRound(getValueByKey(prod, productListObj)) } кг
                     </li>
                 );
             }) }

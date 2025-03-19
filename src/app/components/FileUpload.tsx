@@ -1,14 +1,15 @@
 'use client'
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface FileUploadProps {
   title?: string,
-  onFileUpload: (file: File) => void;
+  inputFileName?: string,
+  onFileUpload: (file: File, name: string) => void;
   onRemoveFile: () => void;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", onFileUpload, onRemoveFile }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", inputFileName, onFileUpload, onRemoveFile }) => {
     const [fileName, setFileName] = useState<string>("");
     const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -23,7 +24,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", 
         }
 
         setFileName(file.name);
-        onFileUpload(file);
+        onFileUpload(file, file.name);
         }
 
     };
@@ -31,7 +32,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", 
         if (hiddenFileInput.current?.value) hiddenFileInput.current.value = '';
         setFileName("");
         onRemoveFile();
-    };
+      };
+      
+    useEffect(() => {
+      if (inputFileName) setFileName(inputFileName)
+    }, [inputFileName])
 
   return (
     <div className="flex flex-col items-center gap-2 p-4 border border-blue-500 rounded-lg">
