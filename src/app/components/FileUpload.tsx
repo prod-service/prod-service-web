@@ -54,6 +54,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", 
       </label>
       {fileName && <p className="text-gray-700">📄 {fileName}</p>}
 
+      {!fileName && <p>формату .xls, .xlsx</p>}
+
       {fileName && <button onClick={handleFileRemove} className="px-2 py-1 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-700">Видалити</button>}
     </div>
   );
