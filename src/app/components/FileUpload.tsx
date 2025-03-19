@@ -1,13 +1,15 @@
 'use client'
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface FileUploadProps {
-  onFileUpload: (file: File) => void;
+  title?: string,
+  inputFileName?: string,
+  onFileUpload: (file: File, name: string) => void;
   onRemoveFile: () => void;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onRemoveFile }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ title="Обрати файл", inputFileName, onFileUpload, onRemoveFile }) => {
     const [fileName, setFileName] = useState<string>("");
     const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -22,7 +24,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onRemoveFile }) =
         }
 
         setFileName(file.name);
-        onFileUpload(file);
+        onFileUpload(file, file.name);
         }
 
     };
@@ -30,10 +32,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onRemoveFile }) =
         if (hiddenFileInput.current?.value) hiddenFileInput.current.value = '';
         setFileName("");
         onRemoveFile();
-    };
+      };
+      
+    useEffect(() => {
+      if (inputFileName) setFileName(inputFileName)
+    }, [inputFileName])
 
   return (
-    <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
+    <div className="flex flex-col items-center gap-2 p-4 border border-blue-500 rounded-lg">
       <input
         ref={hiddenFileInput}
         type="file"
@@ -44,11 +50,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onRemoveFile }) =
         // key={fileName ? fileName : 'default'}
       />
       <label htmlFor="fileInput" className="px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
-        Обрати файл
+        { title }
       </label>
       {fileName && <p className="text-gray-700">📄 {fileName}</p>}
 
-      {fileName && <button onClick={handleFileRemove} className="px-2 py-1 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-700">Remove</button>}
+      {!fileName && <p>формату .xls, .xlsx</p>}
+
+      {fileName && <button onClick={handleFileRemove} className="px-2 py-1 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-700">Видалити</button>}
     </div>
   );
 };

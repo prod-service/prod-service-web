@@ -1,27 +1,28 @@
+import { countByItems, mealNames } from "../consts";
+import { getValueByKey } from "../helpers";
+
 interface IRawTableData {
     [key: string]: string
 };
 
-interface IProduct {
-    [productKey: string]: string
+export interface IProduct {
+    [productKey: string]: string | number
+};
+
+export interface IDishObj {
+    [dishKey: string]: IProduct
+};
+
+export type IMealObj = {
+    [mealKey: string]: IDishObj,
+    [mealKey: symbol]: IProduct,
 };
 
 export interface IMenuObj {
-    [dayKey: string]: {
-        [mealKey: string]: {
-            [dishKey: string]: IProduct
-        }
-    }
+    [dayKey: string]: IMealObj
 };
 
-export const getValueByKey = (key: string, someObj: object): any => {
-    if (!someObj) return null;
-    
-    return someObj[key as keyof typeof someObj];
-};
-
-const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
-
+export const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
     return Object.keys(dishObj).reduce((prev, curr) => {
         const name = getValueByKey(curr, productList);
         if (!name) return prev;
@@ -31,6 +32,18 @@ const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct)
             [name]: getValueByKey(curr, dishObj)
         }
     }, {})
+};
+
+const getMealName = (mealName: string): string => {
+    const defaultValue = '';
+    if (typeof mealName !== 'string') return defaultValue;
+    return mealNames.find(n => n === mealName.toLocaleLowerCase().trim()) || defaultValue;
+};
+
+export const getProductByCountItem = (product: string): string => {
+    const defaultValue = '';
+    if (typeof product !== 'string') return defaultValue;
+    return countByItems.find(n => n === product.toLocaleLowerCase().trim()) || defaultValue;
 };
 
 export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct | object => {
@@ -43,7 +56,7 @@ export const getProducts = (inputTable: IRawTableData[] | unknown[]): IProduct |
 export const getMenuObject = (
     inputTable: IRawTableData[] | unknown[],
     productList: IProduct | object
-): IMenuObj | object => {
+): IMenuObj => {
     const dayKey = '__EMPTY';
     const mealKey = '__EMPTY_1';
     const dishKey = '__EMPTY_2';
@@ -53,7 +66,7 @@ export const getMenuObject = (
 
     inputTable.forEach((rowTable: any) => {
         currentDay = rowTable[dayKey] || currentDay;
-        currentMeal = rowTable[mealKey] || currentMeal;
+        currentMeal = getMealName(rowTable[mealKey]) || currentMeal;
 
         if (rowTable[dayKey]) {
             result = {
@@ -62,10 +75,10 @@ export const getMenuObject = (
             }
         }
 
-        if (rowTable[mealKey]) {
+        if (rowTable[mealKey] && getMealName(rowTable[mealKey])) {
             result[currentDay] = {
                 ...result[currentDay],
-                [rowTable[mealKey].trim()]: {}
+                [getMealName(rowTable[mealKey])]: {}
             }
         }
         
@@ -74,6 +87,7 @@ export const getMenuObject = (
                 ...result[currentDay][currentMeal],
                 [rowTable[dishKey].trim()]: {
                     ...getIngredientsValues(productList, rowTable)
+                    // TODO: лавровий лист, оцет, перець, гірч.порошок parsed to the first dish of breakfast: should change
                 }
             }
         }
