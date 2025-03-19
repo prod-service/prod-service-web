@@ -20,6 +20,8 @@ const MenuUpload: React.FC<MenuUploadProps> = ({ inputFileName, onMenuUpload, on
             const sheet = workbook.Sheets[sheetName];
             const sheetData = utils.sheet_to_json(sheet);
     
+            console.log(sheetData);
+            
             const productsList = getProducts(sheetData)
             const menu = getMenuObject(sheetData.slice(3), productsList);
 
