@@ -46,7 +46,7 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
     if (!mealList.length) return (<div>No list</div>);
 
     return (
-        <div>
+        <div className="text-black">
             <h2 className="text-center text-lg font-bold">{ dayTitle }</h2>
             <div className="text-center">
                 <label>Кількість о/с: <input type="text" value={countInput} onChange={calcHandler} className="border-2 border-blue-500 rounded p-1" /></label>
