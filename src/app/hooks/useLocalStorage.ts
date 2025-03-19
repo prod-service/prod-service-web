@@ -6,7 +6,7 @@ function isSSR() {
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (isSSR()) return initialValue; // SSR: повертаємо початкове значення
+    if (isSSR()) return initialValue; // SSR: return init val
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;

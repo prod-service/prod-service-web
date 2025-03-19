@@ -1,9 +1,10 @@
 import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
-import { addBorderdsTable, addDefultStyles, addStylesToCells, centerAlignH, insertListIntoColumn, smFont } from './excelHelper';
-import cellsInvoiceFormat from "./cellsInvoiceFormat";
+import { addBorderdsTable, addDefultStyles, insertStaticFormattedCells, insertListIntoColumn } from '../helpers/excelHelper';
+import getStaticFormattedCells from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
 import { IInvoiceData } from './invoice-parser';
+import { smFont, centerAlignH } from '../consts';
 
 export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {
     const worksheet = XLSX.utils.aoa_to_sheet([[]]);
@@ -46,15 +47,6 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         { hpx: 25 },
         { hpx: 25 },
     ];
-    
-    console.log(
-        'dishListStart', dishListStart, 
-        'maxDishListLength', maxDishListLength, 
-        'dishListEnd', dishListEnd, 
-        'tableRowStart', tableRowStart,
-        'tableRowEnd', tableRowEnd,
-        'tableDataStart', tableDataStart,
-    );
     
     worksheet['!cols'] = [
         { wch: 8.11 },
@@ -102,22 +94,8 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         { s: { r: 11, c: 0 }, e: { r: 11, c: 9 } },
         { s: { r: 12, c: 0 }, e: { r: 12, c: 9 } },
         { s: { r: 14, c: 0 }, e: { r: 14, c: 9 } },
-        
         { s: { r: 15, c: 3 }, e: { r: 15, c: 5 } }, // Dishes lists title
-        // Dishes lists
-        // { s: { r: 16, c: 3 }, e: { r: 16, c: 5 } },
-        // { s: { r: 17, c: 3 }, e: { r: 17, c: 5 } },
-        // { s: { r: 18, c: 3 }, e: { r: 18, c: 5 } },
-        // { s: { r: 19, c: 3 }, e: { r: 19, c: 5 } },
-        // { s: { r: 20, c: 3 }, e: { r: 20, c: 5 } },
-
         { s: { r: 15, c: 7 }, e: { r: 15, c: 9 } }, // Dishes lists title
-        // Dishes lists
-        // { s: { r: 16, c: 7 }, e: { r: 16, c: 9 } },
-        // { s: { r: 17, c: 7 }, e: { r: 17, c: 9 } },
-        // { s: { r: 18, c: 7 }, e: { r: 18, c: 9 } },
-        // { s: { r: 19, c: 7 }, e: { r: 19, c: 9 } },
-        // { s: { r: 20, c: 7 }, e: { r: 20, c: 9 } },
         // Table start
         { s: { r: tableRowStart, c: 0 }, e: { r: tableRowStart+3, c: 0 } },
         { s: { r: tableRowStart, c: 1 }, e: { r: tableRowStart+3, c: 1 } },
@@ -126,45 +104,41 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         { s: { r: tableRowStart+1, c: 4 }, e: { r: tableRowStart+2, c: 5 } },
         { s: { r: tableRowStart+1, c: 6 }, e: { r: tableRowStart+2, c: 7 } },
         { s: { r: tableRowStart+1, c: 8 }, e: { r: tableRowStart+2, c: 9 } },
-        // 25 end of titles
         // Table end
         { s: { r: tableRowEnd+2, c: 0 }, e: { r: tableRowEnd+2, c: 9 } },
         { s: { r: tableRowEnd+3, c: 0 }, e: { r: tableRowEnd+3, c: 9 } },
         { s: { r: tableRowEnd+4, c: 0 }, e: { r: tableRowEnd+4, c: 9 } },
-        { s: { r: tableRowEnd+5, c: 0 }, e: { r: tableRowEnd+5, c: 9 } }, // 61
-        
+        { s: { r: tableRowEnd+5, c: 0 }, e: { r: tableRowEnd+5, c: 9 } },
         { s: { r: tableRowEnd+6, c: 0 }, e: { r: tableRowEnd+6, c: 3 } },
-        { s: { r: tableRowEnd+6, c: 5 }, e: { r: tableRowEnd+6, c: 9 } }, // 62
-        { s: { r: tableRowEnd+7, c: 0 }, e: { r: tableRowEnd+7, c: 3 } }, // 63
-        { s: { r: tableRowEnd+7, c: 5 }, e: { r: tableRowEnd+7, c: 9 } }, // 63
-        { s: { r: tableRowEnd+8, c: 1 }, e: { r: tableRowEnd+8, c: 3 } }, // 64
-        { s: { r: tableRowEnd+8, c: 5 }, e: { r: tableRowEnd+8, c: 9 } }, // 64
+        { s: { r: tableRowEnd+6, c: 5 }, e: { r: tableRowEnd+6, c: 9 } },
+        { s: { r: tableRowEnd+7, c: 0 }, e: { r: tableRowEnd+7, c: 3 } },
+        { s: { r: tableRowEnd+7, c: 5 }, e: { r: tableRowEnd+7, c: 9 } },
+        { s: { r: tableRowEnd+8, c: 1 }, e: { r: tableRowEnd+8, c: 3 } },
+        { s: { r: tableRowEnd+8, c: 5 }, e: { r: tableRowEnd+8, c: 9 } },
         { s: { r: tableRowEnd+9, c: 1 }, e: { r: tableRowEnd+9, c: 3 } },
-        { s: { r: tableRowEnd+9, c: 5 }, e: { r: tableRowEnd+9, c: 9 } }, // 65
+        { s: { r: tableRowEnd+9, c: 5 }, e: { r: tableRowEnd+9, c: 9 } },
         { s: { r: tableRowEnd+10, c: 1 }, e: { r: tableRowEnd+10, c: 3 } },
-        { s: { r: tableRowEnd+10, c: 5 }, e: { r: tableRowEnd+10, c: 9 } }, // 66
+        { s: { r: tableRowEnd+10, c: 5 }, e: { r: tableRowEnd+10, c: 9 } },
         { s: { r: tableRowEnd+11, c: 1 }, e: { r: tableRowEnd+11, c: 3 } },
-        { s: { r: tableRowEnd+11, c: 5 }, e: { r: tableRowEnd+11, c: 9 } }, // 67
+        { s: { r: tableRowEnd+11, c: 5 }, e: { r: tableRowEnd+11, c: 9 } },
         { s: { r: tableRowEnd+12, c: 1 }, e: { r: tableRowEnd+12, c: 3 } },
-        { s: { r: tableRowEnd+12, c: 5 }, e: { r: tableRowEnd+12, c: 9 } }, // 68
+        { s: { r: tableRowEnd+12, c: 5 }, e: { r: tableRowEnd+12, c: 9 } },
         { s: { r: tableRowEnd+13, c: 1 }, e: { r: tableRowEnd+13, c: 3 } },
-        { s: { r: tableRowEnd+13, c: 5 }, e: { r: tableRowEnd+13, c: 9 } }, // 69
-        // { s: { r: tableRowEnd+14, c: 1 }, e: { r: tableRowEnd+14, c: 3 } },
-        // { s: { r: tableRowEnd+14, c: 5 }, e: { r: tableRowEnd+14, c: 9 } }, // 70
+        { s: { r: tableRowEnd+13, c: 5 }, e: { r: tableRowEnd+13, c: 9 } },
         { s: { r: tableRowEnd+16, c: 1 }, e: { r: tableRowEnd+16, c: 3 } },
-        { s: { r: tableRowEnd+16, c: 5 }, e: { r: tableRowEnd+16, c: 9 } }, // 73
+        { s: { r: tableRowEnd+16, c: 5 }, e: { r: tableRowEnd+16, c: 9 } },
         { s: { r: tableRowEnd+17, c: 1 }, e: { r: tableRowEnd+17, c: 3 } },
-        { s: { r: tableRowEnd+17, c: 5 }, e: { r: tableRowEnd+17, c: 9 } }, // 74
+        { s: { r: tableRowEnd+17, c: 5 }, e: { r: tableRowEnd+17, c: 9 } },
         { s: { r: tableRowEnd+18, c: 1 }, e: { r: tableRowEnd+18, c: 3 } },
-        { s: { r: tableRowEnd+18, c: 5 }, e: { r: tableRowEnd+18, c: 9 } }, // 75
+        { s: { r: tableRowEnd+18, c: 5 }, e: { r: tableRowEnd+18, c: 9 } },
         { s: { r: tableRowEnd+19, c: 1 }, e: { r: tableRowEnd+19, c: 3 } },
-        { s: { r: tableRowEnd+19, c: 5 }, e: { r: tableRowEnd+19, c: 9 } }, // 76
+        { s: { r: tableRowEnd+19, c: 5 }, e: { r: tableRowEnd+19, c: 9 } },
         { s: { r: tableRowEnd+20, c: 1 }, e: { r: tableRowEnd+20, c: 3 } },
-        { s: { r: tableRowEnd+20, c: 5 }, e: { r: tableRowEnd+20, c: 9 } }, // 77
+        { s: { r: tableRowEnd+20, c: 5 }, e: { r: tableRowEnd+20, c: 9 } },
         { s: { r: tableRowEnd+21, c: 1 }, e: { r: tableRowEnd+21, c: 3 } },
-        { s: { r: tableRowEnd+21, c: 5 }, e: { r: tableRowEnd+21, c: 9 } }, // 78
+        { s: { r: tableRowEnd+21, c: 5 }, e: { r: tableRowEnd+21, c: 9 } },
         { s: { r: tableRowEnd+22, c: 1 }, e: { r: tableRowEnd+22, c: 3 } },
-        { s: { r: tableRowEnd+22, c: 5 }, e: { r: tableRowEnd+22, c: 9 } }, // 79
+        { s: { r: tableRowEnd+22, c: 5 }, e: { r: tableRowEnd+22, c: 9 } },
     ];
 
     for (let indexList = 0; indexList < maxDishListLength; indexList++) {
@@ -220,7 +194,8 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
     // boreders for table
     addBorderdsTable(worksheet, range);
 
-    addStylesToCells(worksheet, cellsInvoiceFormat({ tableRowStartIndex: tableRowStart, tableRowEndIndex: tableRowEnd }));
+    // add static cells with value and styles
+    insertStaticFormattedCells(worksheet, getStaticFormattedCells({ tableRowStartIndex: tableRowStart, tableRowEndIndex: tableRowEnd }));
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');

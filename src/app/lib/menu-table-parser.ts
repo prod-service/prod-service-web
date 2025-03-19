@@ -1,6 +1,6 @@
 import { WorkSheet } from "xlsx-js-style";
 import { countByItems, mealNames } from "../consts";
-import { getValueByKey } from "../helpers";
+import { getNumberFromStr, getValueByKey, replaceAllNumbers } from "../helpers";
 
 interface IRawTableData {
     [key: string]: string
@@ -23,7 +23,13 @@ export interface IMenuObj {
     [dayKey: string]: IMealObj
 };
 
-export const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
+const getMealName = (mealName: string): string => {
+    const defaultValue = '';
+    if (typeof mealName !== 'string') return defaultValue;
+    return mealNames.find(n => n === mealName.toLocaleLowerCase().trim()) || defaultValue;
+};
+
+const getIngredientsValues = (productList: IProduct | object, dishObj: IProduct): IProduct => {
     return Object.keys(dishObj).reduce((prev, curr) => {
         const name = getValueByKey(curr, productList);
         if (!name) return prev;
@@ -33,21 +39,6 @@ export const getIngredientsValues = (productList: IProduct | object, dishObj: IP
             [name]: getValueByKey(curr, dishObj)
         }
     }, {})
-};
-
-const getMealName = (mealName: string): string => {
-    const defaultValue = '';
-    if (typeof mealName !== 'string') return defaultValue;
-    return mealNames.find(n => n === mealName.toLocaleLowerCase().trim()) || defaultValue;
-};
-
-const getNumberFromStr = (input: string): number | null => {
-    const match = input.match(/\d+/); // find numbers
-    return match ? parseInt(match[0], 10) : null;
-};
-
-const replaceAllNumbers = (input: string, newNumber: number): string => {
-  return input.replace(/\d+/g, newNumber.toString()); // Замінюємо всі числа
 };
 
 export const addingFirstRowToExcelSheet = (sheet: WorkSheet): WorkSheet => {
@@ -81,8 +72,8 @@ export const getMenuObject = (
     const mealKey = '__EMPTY_1';
     const dishKey = '__EMPTY_2';
     let result: IMenuObj = {};
-    let currentDay = '';
-    let currentMeal = '';
+    let currentDay: string = '';
+    let currentMeal: string = '';
 
     inputTable.forEach((rowTable: any) => {
         currentDay = rowTable[dayKey] || currentDay;
