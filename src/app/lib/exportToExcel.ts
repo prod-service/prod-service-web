@@ -1,26 +1,13 @@
 import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
-import { addBorderdsTable, addStylesToCells, centerAlignH, defaultFont, leftCenterAlignHV, smFont } from './excelHelper';
+import { addBorderdsTable, addDefultStyles, addStylesToCells, centerAlignH, insertListIntoColumn, smFont } from './excelHelper';
 import cellsInvoiceFormat from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
 import { IInvoiceData } from './invoice-parser';
 
-const insertListIntoColumn = (worksheet: XLSX.WorkSheet, list: string[], colName: string, colStart: number): void => {
-    list.forEach((item, idx) => {
-        const cell = `${colName}${colStart + idx}`;
-        // XLSX.utils.sheet_add_aoa(worksheet, [[item]], { origin: cell })
-        worksheet[cell] = {
-            v: item,
-            s: { font: defaultFont, alignment: leftCenterAlignHV }
-        }
-    });
-};
-
 export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {
     const worksheet = XLSX.utils.aoa_to_sheet([[]]);
-    const { numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
-    // const defaultTableRows = 32;
-    // const shiftTableRow = products.length - defaultTableRows;
+    const { date, numberPeople, breakfastDishes, lunchDishes, dinnerDishes, products } = payload;
     const dishListStart = 17;
     const maxDishListLength = Math.max(breakfastDishes.length, lunchDishes.length, dinnerDishes.length);
     const dishListEnd = dishListStart + maxDishListLength - 1;
@@ -61,16 +48,14 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
     ];
     
     console.log(
-        'dishListStart', dishListStart, '\b',
-        'maxDishListLength', maxDishListLength, '\b',
-        'dishListEnd', dishListEnd, '\b',
-        'tableRowStart', tableRowStart,'\b',
-        'tableRowEnd', tableRowEnd,'\b',
-        'tableDataStart', tableDataStart,'\b',
+        'dishListStart', dishListStart, 
+        'maxDishListLength', maxDishListLength, 
+        'dishListEnd', dishListEnd, 
+        'tableRowStart', tableRowStart,
+        'tableRowEnd', tableRowEnd,
+        'tableDataStart', tableDataStart,
     );
     
-
-
     worksheet['!cols'] = [
         { wch: 8.11 },
         { wch: 30.80 },
@@ -101,71 +86,6 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         {},
         {}, // На обід/сніданок/вечерю [15]
         {},
-        // {}, // динамічний список [16]
-        // {}, // динамічний список
-        // {}, // динамічний список
-        // {}, // динамічний список
-        // {}, // динамічний список [20]
-        // {},
-        // {},
-        // {}, // [23] таблиця початок
-        // {},
-        // {},
-        // { hpx: 101 }, 
-        // {}, // table content start [27] [28 row]
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {},
-        // {}, // table end [56]
-        // {},
-        // { hpx: 17 },
-        // { hpx: 13 },
-        // { hpx: 17 },
-        // { hpx: 13 },
-        // { hpx: 17 },
-        // { hpx: 17 },
-        
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // {},
-        // {},
-        // {},
-        // { hpx: 60 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
-        // { hpx: 25 },
     ];
     // should be dynamic
     worksheet['!merges'] = [
@@ -268,16 +188,20 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
     if (worksheet['!rows']) worksheet['!rows'].splice(tableRowStart, 0, ...tableTitlesRows);
     
     // Add dynamic field
+    XLSX.utils.sheet_add_aoa(worksheet, [[date]], { origin: 'A12', cellStyles: true }); // dynamic cell
+    worksheet['A12'].s = { font: smFont, alignment: centerAlignH };
+    // Add dynamic field
     XLSX.utils.sheet_add_aoa(worksheet, [[getMainTitleDesc(numberPeople)]], { origin: 'A13', cellStyles: true }); // dynamic cell
     worksheet['A13'].s = { font: smFont, alignment: centerAlignH };
     
     // Data insert
-    XLSX.utils.sheet_add_json(worksheet, products, { skipHeader: true, origin: `A${tableDataStart+1}` });
+    XLSX.utils.sheet_add_json(worksheet, products, { skipHeader: true, origin: `A${tableDataStart+1}`, cellStyles: true });
     
-    // find last row and col
+    // find last row and col of table
     const lastRow = tableRowEnd + 1;
     const lastCol = Object.keys(products[0]).length - 1;
     const range = `A${tableRowStart + 1}:${XLSX.utils.encode_col(lastCol + 1)}${lastRow}`;
+    const rangeDataArea = `A${tableDataStart + 1}:${XLSX.utils.encode_col(lastCol + 1)}${lastRow}`;
     
     // Add space for after table
     if (worksheet['!rows']) worksheet['!rows'].splice(
@@ -289,21 +213,9 @@ export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.
         {}, {},
         ...conclusionsRows 
     );
-    // if (worksheet['!rows']) worksheet['!rows'].splice(
-    //     tableRowEnd + shiftAfterTable + 1 + signsAfterTableRows.length,
-    //     0,
-    //     ...productsPubReceivedRows
-    // );
-    // if (worksheet['!rows']) worksheet['!rows'].splice(
-    //     tableRowEnd + shiftAfterTable + 1
-    //     , 0, {}, {}
-    // );
-    // if (worksheet['!rows']) worksheet['!rows'].splice(
-    //     tableRowEnd + shiftAfterTable + 1,
-    //     0,
-    //     ...conclusionsRows
-    // );
-    
+
+    // add default font styles
+    addDefultStyles(worksheet, rangeDataArea);
 
     // boreders for table
     addBorderdsTable(worksheet, range);

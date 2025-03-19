@@ -12,12 +12,42 @@ export const leftAlignH = { horizontal: 'left', wrapText: true };
 export const leftCenterAlignHV = { horizontal: 'left', vertical: 'center', wrapText: true };
 export const defaultBorderStyle = { style: 'thin', color: { rgb: '000000' } };
 
+export const insertListIntoColumn = (worksheet: XLSX.WorkSheet, list: string[], colName: string, colStart: number): void => {
+    list.forEach((item, idx) => {
+        const cell = `${colName}${colStart + idx}`;
+        worksheet[cell] = {
+            v: item,
+            s: { font: defaultFont, alignment: leftCenterAlignHV }
+        }
+    });
+};
+
 export const addStylesToCells = (worksheet: XLSX.WorkSheet, formattedCells: any[]) => {
     formattedCells.forEach(({ cell, value, style }) => {
         if (!worksheet[cell]) worksheet[cell] = {};
         XLSX.utils.sheet_add_aoa(worksheet, [[value]], { origin: cell, cellStyles: true });
         worksheet[cell].s = style;
     });
+};
+
+export const addDefultStyles = (worksheet: XLSX.WorkSheet, range: string): void => {
+    const rangeRef = XLSX.utils.decode_range(range);
+    
+    for (let row = rangeRef.s.r; row <= rangeRef.e.r; row++) {
+    
+        for (let col = rangeRef.s.c; col <= rangeRef.e.c; col++) {
+            const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+    
+            if (!worksheet[cellAddress]) worksheet[cellAddress] = { v: '' }; // Якщо комірка порожня, створюємо її
+            
+            worksheet[cellAddress].s = {
+                ...worksheet[cellAddress].s,
+                font: defaultFont, 
+                alignment: centerAlignVH
+            };
+            console.log(worksheet[cellAddress]);
+        }
+    }
 };
 
 export const addBorderdsTable = (worksheet: XLSX.WorkSheet, range: string) => {
@@ -31,12 +61,13 @@ export const addBorderdsTable = (worksheet: XLSX.WorkSheet, range: string) => {
             if (!worksheet[cellAddress]) worksheet[cellAddress] = { v: '' }; // Якщо комірка порожня, створюємо її
 
             worksheet[cellAddress].s = {
-            border: {
-                top: defaultBorderStyle,
-                bottom: defaultBorderStyle,
-                left: defaultBorderStyle,
-                right: defaultBorderStyle,
-            },
+                ...worksheet[cellAddress].s,
+                border: {
+                    top: defaultBorderStyle,
+                    bottom: defaultBorderStyle,
+                    left: defaultBorderStyle,
+                    right: defaultBorderStyle,
+                },
             };
         }
     }

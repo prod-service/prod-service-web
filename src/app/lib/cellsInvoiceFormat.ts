@@ -97,14 +97,14 @@ export default ({ tableRowStartIndex, tableRowEndIndex }: ICellsFormats): ICells
             alignment: centerAlignH
         }
     },
-    {
-        cell: 'A12',
-        value: emptyDate,
-        style: { 
-            font: smFont, 
-            alignment: centerAlignH
-        }
-    },
+    // {
+    //     cell: 'A12',
+    //     value: emptyDate,
+    //     style: { 
+    //         font: smFont, 
+    //         alignment: centerAlignH
+    //     }
+    // },
     // {
     //     cell: 'A13',
     //     value: '', // dynamic cell
