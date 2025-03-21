@@ -39,7 +39,12 @@ const MenuUpload: React.FC<MenuUploadProps> = ({ inputFileName, onMenuUpload, on
 
     return(
         <div className="menu-upload">
-            <FileUpload title="Загрузити розкладку" inputFileName={inputFileName} onFileUpload={handlerUploading} onRemoveFile={handlerRemoveFile} />
+            <FileUpload
+                title="Загрузити розкладку"
+                inputFileName={inputFileName}
+                onFileUpload={handlerUploading}
+                onRemoveFile={handlerRemoveFile}
+            />
         </div>
     );
 };

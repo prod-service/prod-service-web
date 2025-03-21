@@ -1,5 +1,5 @@
+import { defaultFont, leftAlignH, centerAlignH, xsmFont, smFont, centerAlignVH, defaultBorderStyle, lgFont } from "../consts";
 import { appendTitle, approve, approveSign, breakfast, commanderConclusion, dinner, dishesName, doctorConclusion, emptyDate, forBreakfast, forBreakfastSign, forBreakfastSign2, forDinner, forDinnerSign, forLunch, forLunchSign, formatTitle, lunch, mainSubTitle, mainTitle, numTitle, perPerson, perTeam, productsName, productsPub, productsReceived, shouldBeIssued, signTable, total, underApproveSign, underApproveSign2, underSignTable } from "../dictionary";
-import { defaultFont, leftAlignH, centerAlignH, xsmFont, smFont, centerAlignVH, lgFont, defaultBorderStyle } from "./excelHelper";
 
 interface ICellsFormats {
     tableRowStartIndex: number,
@@ -12,7 +12,7 @@ interface ICellsFormatsValues {
     style: object,
 };
 
-export default ({ tableRowStartIndex, tableRowEndIndex }: ICellsFormats): ICellsFormatsValues[] => {
+const getStaticFormattedCells = ({ tableRowStartIndex, tableRowEndIndex }: ICellsFormats): ICellsFormatsValues[] => {
     const rowStart = tableRowStartIndex + 1;
     const rowEnd = tableRowEndIndex + 1;
     
@@ -603,3 +603,5 @@ export default ({ tableRowStartIndex, tableRowEndIndex }: ICellsFormats): ICells
     }
     ];
 };
+
+export default getStaticFormattedCells;

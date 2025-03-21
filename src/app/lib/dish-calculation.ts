@@ -6,26 +6,25 @@ export interface ICalcObj {
 };
 
 export const calculateTotalProducts = (originObj: IMealObj): IProduct => {
-    let productsTotal: IProduct = {};
+    const dishesList = Object.values(originObj).reduce((prev, meal) => {
+        return { ...prev, ...meal }
+    }, {});
 
-    // TODO: review later
-    // Loop for each meal (сніданок, обід, вечеря)
-    Object.keys(originObj).forEach((meal) => {
-        // Loop for each dish (Макарони відварні та соус, Риба смажена ...)
-        Object.keys(getValueByKey(meal, originObj)).forEach((dish) => {
-            // Loop for each product (Олія, Оцет, Крупа гречана)
-            Object.keys(getValueByKey(dish, getValueByKey(meal, originObj))).forEach((product) => {
-                const value: number = parseToNum(getValueByKey(product, getValueByKey(dish, getValueByKey(meal, originObj))));
-                const pervTotalValue: number = parseToNum(getValueByKey(product, productsTotal) || 0);
-                const result = numRound(pervTotalValue + value);
+    return Object.keys(dishesList).reduce((prev, dish) => {
+        const productList = getValueByKey(dish, dishesList);
 
-                if (pervTotalValue) productsTotal[product] = result;
-                else productsTotal = { ...productsTotal, [product]: result };
-            });
-        });
-    });
-
-    return productsTotal;
+        return {
+            ...prev,
+            ...Object.keys(productList).reduce((prevProd, currProd) => {
+                const prodValue = parseToNum(getValueByKey(currProd, productList) || 0);
+                const prevValue = parseToNum(getValueByKey(currProd, prev) || 0);
+                return {
+                    ...prevProd,
+                    [currProd]: prevValue ? prevValue + prodValue : prodValue
+                }
+            }, {})
+        };
+    }, {});
 };
 
 export const calculateDishObect = (quantity: number, originObj: ICalcObj): ICalcObj => {

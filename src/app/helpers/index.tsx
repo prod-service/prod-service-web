@@ -24,3 +24,12 @@ export const findDateStr = (str: string): string => {
     if (match) return match[0];
     return '';
 };
+
+export const getNumberFromStr = (input: string): number | null => {
+    const match = input.match(/\d+/); // find numbers
+    return match ? parseInt(match[0], 10) : null;
+};
+
+export const replaceAllNumbers = (input: string, newNumber: number): string => {
+  return input.replace(/\d+/g, newNumber.toString()); // change all numbers
+};

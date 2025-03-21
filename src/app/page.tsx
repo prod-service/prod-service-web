@@ -7,9 +7,10 @@ import { IMenuObj } from "./lib/menu-table-parser";
 import MenuFullList from "./components/menu/MenuFullList";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import WarningMsg from "./components/WarningMsg";
+import { warningMessage } from "./consts";
 
 const Home: React.FC = () => {
-  const [showWarn, setShowWarn] = useState(true);
+  const [showWarn, setShowWarn] = useState<boolean>(true);
   const [mainMenuName, setMainMenuName, removeMainMenuName] = useLocalStorage<string>("fileName", "");
   const [mainMenu, setMainMenu, removeMainMenu] = useLocalStorage<IMenuObj>("fullMenu", {});
 
@@ -22,8 +23,6 @@ const Home: React.FC = () => {
     removeMainMenu();
     removeMainMenuName();
   };
-
-  const warningMessage: string = `Увага! Перед загрузкою розкладки, очистіть клітинки які містять прізвища, посади і звання всіх відповідальних осіб. Також очистіть шапку із затвердженням командира в/ч.`;
 
   useEffect(() => {
     setShowWarn(!mainMenuName.length);
@@ -42,13 +41,15 @@ const Home: React.FC = () => {
           />
           */}
         <h1 className="text-2xl text-center mb-4">Розрахунок розкладки-накладної для видачі продуктів харчування</h1>
-        <div className="max-w-64 my-0 mx-auto mb-5">
+        <section className="max-w-64 my-0 mx-auto mb-5">
           <MenuUpload inputFileName={mainMenuName} onMenuUpload={menuUploadHandler} onMenuRemove={menuRemoveHandler} />
-        </div>
+        </section>
         
-        <div className="md:max-w-80 my-0 mx-auto mb-5">
-          { showWarn && <WarningMsg text={ warningMessage } /> }
-        </div>
+        { showWarn &&
+          <section className="md:max-w-80 my-0 mx-auto mb-5">
+            <WarningMsg text={ warningMessage } />
+          </section>
+        }
 
         <MenuFullList menuObject={mainMenu} />
 

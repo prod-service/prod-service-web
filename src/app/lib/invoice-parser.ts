@@ -71,7 +71,6 @@ export const parseIntoInvoice = ({ dayTitle, numberPeople, inputData, singleData
         date: date,
         numberPeople: numberPeople,
         breakfastDishes: Object.keys(teamBreakfast),
-        // lunchDishes: ['aspdo', 'asd asd as asd ', 'asd as d', 'asdasdasd', '123qwe1e12e', '123123123'],
         lunchDishes: Object.keys(teamLunch),
         dinnerDishes: Object.keys(teamDinner),
         products: singleProductsList

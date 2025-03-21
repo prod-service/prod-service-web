@@ -35,7 +35,7 @@ const MealForm: React.FC<MealFormProps> = ({ originFormObj, dayTitle = '' }) => 
             singleData: originFormObj
         });
 
-        exportToExcel(res, 'Розкладка-накладна '+dayTitle+'.xlsx');    
+        exportToExcel(res, `Розкладка-накладна ${dayTitle}.xlsx`);    
     };
 
     useEffect(() => {
