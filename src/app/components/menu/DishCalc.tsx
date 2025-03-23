@@ -1,8 +1,8 @@
 import { getValueByKey, parseToNum } from "@/app/helpers";
-import { IDishObj } from "@/app/lib/menu-table-parser";
+import { IDishObj } from "@/app/lib/menuTableParser";
 import { useState, useEffect } from "react";
 import ProductListValues from "./ProductListValues";
-import { calculateDishObect } from "@/app/lib/dish-calculation";
+import { calculateDishObect } from "@/app/lib/dishCalculation";
 
 interface DishCalcProps {
     dishListObj: IDishObj,
@@ -19,9 +19,7 @@ const DishCalc: React.FC<DishCalcProps> = ({ dishListObj, countInput, onDishChan
     });
 
     useEffect(() => {
-        if (dishListObj) {
-            setDishList(Object.keys(dishListObj));
-        }
+        if (dishListObj) setDishList(Object.keys(dishListObj));
     }, [dishListObj]);
 
     useEffect(() => {

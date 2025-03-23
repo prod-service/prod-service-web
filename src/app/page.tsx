@@ -3,9 +3,9 @@
 import "./styles/globals.scss";
 import MenuUpload from "./components/menu/MenuUpload";
 import { useEffect, useState } from "react";
-import { IMenuObj } from "./lib/menu-table-parser";
+import { IMenuObj } from "./lib/menuTableParser";
 import MenuFullList from "./components/menu/MenuFullList";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useLocalStorage } from "./hooks";
 import WarningMsg from "./components/WarningMsg";
 import { warningMessage } from "./consts";
 

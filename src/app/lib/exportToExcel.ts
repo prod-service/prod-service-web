@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { addBorderdsTable, addDefultStyles, insertStaticFormattedCells, insertListIntoColumn } from '../helpers/excelHelper';
 import getStaticFormattedCells from "./cellsInvoiceFormat";
 import { getMainTitleDesc } from '../dictionary';
-import { IInvoiceData } from './invoice-parser';
+import { IInvoiceData } from './invoiceParser';
 import { smFont, centerAlignH } from '../consts';
 
 export const exportToExcel = (payload: IInvoiceData, filename: string = 'export.xlsx') => {

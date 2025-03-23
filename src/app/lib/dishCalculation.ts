@@ -1,5 +1,5 @@
 import { getValueByKey, numRound, parseToNum } from "../helpers";
-import { getProductByCountItem, IMealObj, IProduct } from "./menu-table-parser";
+import { getProductByCountItem, IMealObj, IProduct } from "./menuTableParser";
 
 export interface ICalcObj {
     [dishName: string]: IProduct
