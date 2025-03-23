@@ -1,5 +1,5 @@
 import { getValueByKey, numRound } from "@/app/helpers";
-import { IProduct } from "@/app/lib/menu-table-parser";
+import { IProduct } from "@/app/lib/menuTableParser";
 import { useEffect, useState } from "react";
 
 interface ProductListValuesProps {

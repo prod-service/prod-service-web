@@ -1,7 +1,7 @@
 import { breakfast, dinner, lunch } from "../consts";
 import { findDateStr, getValueByKey, parseToNum } from "../helpers";
-import { calculateTotalProducts } from "./dish-calculation";
-import { IDishObj, IMealObj, IProduct } from "./menu-table-parser";
+import { calculateTotalProducts } from "./dishCalculation";
+import { IDishObj, IMealObj, IProduct } from "./menuTableParser";
 
 interface ISingleProductRow {
     number: number,

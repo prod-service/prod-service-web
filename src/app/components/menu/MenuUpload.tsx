@@ -1,6 +1,6 @@
 'use client'
 
-import { addingFirstRowToExcelSheet, getMenuObject, getProducts, IMenuObj } from "../../lib/menu-table-parser";
+import { addingFirstRowToExcelSheet, getMenuObject, getProducts, IMenuObj } from "../../lib/menuTableParser";
 import FileUpload from "../FileUpload";
 import { read, utils } from "xlsx-js-style";
 

@@ -1,5 +1,5 @@
-import { useEffect, useReducer, useState } from "react";
-import { IMenuObj } from "@/app/lib/menu-table-parser";
+import { useEffect, useReducer } from "react";
+import { IMenuObj } from "@/app/lib/menuTableParser";
 import MenuSingleDay from "./MenuSingleDay";
 import Popup from "../Popup";
 import { getValueByKey } from "@/app/helpers";
