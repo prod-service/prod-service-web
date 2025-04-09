@@ -8,6 +8,7 @@ import MenuFullList from "./components/menu/MenuFullList";
 import { useLocalStorage } from "./hooks";
 import WarningMsg from "./components/WarningMsg";
 import { warningMessage } from "./consts";
+import MultipleUploadFileList from "./components/MultipleFileList/MultipleUploadFileList";
 
 const Home: React.FC = () => {
   const [showWarn, setShowWarn] = useState<boolean>(true);
@@ -40,6 +41,7 @@ const Home: React.FC = () => {
           priority
           />
           */}
+        <MultipleUploadFileList />
         <h1 className="text-2xl text-center mb-4">Розрахунок розкладки-накладної для видачі продуктів харчування</h1>
         <section className="max-w-64 my-0 mx-auto mb-5">
           <MenuUpload inputFileName={mainMenuName} onMenuUpload={menuUploadHandler} onMenuRemove={menuRemoveHandler} />
