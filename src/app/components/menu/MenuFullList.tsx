@@ -33,7 +33,7 @@ const MenuFullList: React.FC<MenuFullListProps> = ({ menuObject }) => {
                         return <li key={index} className="p-2 md:p-4 mb-4 border-2">
                             <div className="flex justify-between">
                                 <span className="font-bold mr-2">{dayName}</span>
-                                <button onClick={() => showPopupDay(index)} className="transition bg-indigo-500 hover:bg-indigo-400 py-1 px-2 rounded text-white">
+                                <button onClick={() => showPopupDay(index)} className="transition bg-indigo-500 hover:bg-indigo-400 py-1 px-2 text-white">
                                     Відкрити
                                 </button>
                             </div>

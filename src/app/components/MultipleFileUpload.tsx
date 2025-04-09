@@ -48,7 +48,7 @@ const MultipleFileUpload: React.FC<FileUploadProps> = ({
         multiple
         // key={fileName ? fileName : 'default'}
       />
-      <label htmlFor="fileInput" className="transition px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
+      <label htmlFor="fileInput" className="transition px-4 py-2 bg-blue-500 text-white cursor-pointer hover:bg-blue-600">
         { title }
       </label>
       
@@ -56,7 +56,7 @@ const MultipleFileUpload: React.FC<FileUploadProps> = ({
 
       {!fileName && <p>{`формату ${alertFileExtensionsText}`}</p>}
 
-      {/* {fileName && <button onClick={handleFileRemove} className="px-2 py-1 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-700">Видалити</button>} */}
+      {/* {fileName && <button onClick={handleFileRemove} className="px-2 py-1 bg-red-500 text-white cursor-pointer hover:bg-red-700">Видалити</button>} */}
     </div>
   );
 };
