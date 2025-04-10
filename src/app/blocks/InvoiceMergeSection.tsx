@@ -1,11 +1,13 @@
+import { read, utils } from "xlsx-js-style";
 import MultipleUploadFileList from "../components/MultipleFileList/MultipleUploadFileList";
 import { ICustomFile } from "../components/MultipleFileUpload";
-import { read, utils } from "xlsx-js-style";
+import { useSheetMerge } from "../hooks";
+import { IProductItem } from "../hooks/useSheetMerge";
 
 const InvoiceMergeSection = () => {
     const onSendFilesHandler = async (files: ICustomFile[]) => {
         if (!files.length) return;
-        console.log(files);
+
         const promisesArr = files.map(({ file }) => (file.arrayBuffer()));
 
         const bufferArray = await Promise.all(promisesArr);
@@ -16,15 +18,10 @@ const InvoiceMergeSection = () => {
             return utils.sheet_to_json(workbook.Sheets[sheetName]);
         });
 
-        console.log(sheetList);
-        
+        const productList: IProductItem[] = useSheetMerge(sheetList);
 
-        // files[0].file.arrayBuffer().then((data) => {
-        //     const workbook = read(data);
-        //     const sheetName = workbook.SheetNames[0];
-        //     let sheet = workbook.Sheets[sheetName];
-        //     console.log(sheet);
-        // });
+        console.log(productList);
+        
     };
 
     return (

@@ -40,3 +40,7 @@ export const centerAlignVH = { vertical: 'center', horizontal: 'center', wrapTex
 export const leftAlignH = { horizontal: 'left', wrapText: true };
 export const leftCenterAlignHV = { horizontal: 'left', vertical: 'center', wrapText: true };
 export const defaultBorderStyle = { style: 'thin', color: { rgb: '000000' } };
+
+// For excel parsed JSON
+export const productCol = '__EMPTY_1';
+export const productValueCol = '__EMPTY_8';
