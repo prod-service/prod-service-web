@@ -3,8 +3,8 @@ import DishCalc from "./DishCalc";
 import { IMealObj } from "@/app/lib/menuTableParser";
 import { getValueByKey } from "@/app/helpers";
 import { IInvoiceData, parseIntoInvoice } from "@/app/lib/invoiceParser";
-import { exportToExcel } from "@/app/lib/exportToExcel";
-import localMealObject from "@/app/lib/localMealJbject";
+import { exportToExcel } from "@/app/lib/exportInvoiceToExcel";
+import localMealObject from "@/app/lib/localMealObject";
 import { useInputNumber } from "@/app/hooks";
 
 interface MealFormProps {

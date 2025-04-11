@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { geistSans, geistMono } from "./ui/fonts";
-// import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar";
 
 export const metadata: Metadata = {
   title: "Продовольча служба",
@@ -18,7 +18,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-white text-black antialiased`}
       >
-        {/* <NavBar /> */}
+        <NavBar />
         {children}
       </body>
     </html>

@@ -9,13 +9,13 @@ export default function NavBar() {
     console.log(pathname);
     
     return (
-        <nav>
-            <ul>
-                <li>
-                    <Link href={"/"}>Home</Link>
+        <nav className="p-4">
+            <ul className="text-center">
+                <li className="inline-block mx-2">
+                    <Link className="border-b-4 hover:border-slate-400" href={"/"}>Розкладка</Link>
                 </li>
-                <li>
-                    <Link href={"/calc"}>Calc Page</Link>
+                <li className="inline-block mx-2">
+                    <Link className="border-b-4 hover:border-slate-400" href={"/invoice-merge"}>Сума накладних</Link>
                 </li>
             </ul>   
         </nav>
