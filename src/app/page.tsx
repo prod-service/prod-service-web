@@ -40,6 +40,7 @@ const Home: React.FC = () => {
           priority
           />
           */}
+        {/* <InvoiceMergeSection /> */}
         <h1 className="text-2xl text-center mb-4">Розрахунок розкладки-накладної для видачі продуктів харчування</h1>
         <section className="max-w-64 my-0 mx-auto mb-5">
           <MenuUpload inputFileName={mainMenuName} onMenuUpload={menuUploadHandler} onMenuRemove={menuRemoveHandler} />
