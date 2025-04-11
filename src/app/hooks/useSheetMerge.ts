@@ -5,9 +5,11 @@ export interface IProductItem {
     value: number
 };
 
-export const useSheetMerge = (sheetList: unknown[][]): IProductItem[] => {
-    const productMap = new Map<string, IProductItem>();
-    
+export interface IUseSheetMerge {
+    mergeLists: (sheetList: unknown[][]) => IProductItem[]
+};
+
+export const useSheetMerge = (): IUseSheetMerge => {
     const findProduct = (tableObj: any): IProductItem | undefined => {
         const prodName = tableObj[productCol];
         const prodValue = tableObj[productValueCol];
@@ -16,21 +18,26 @@ export const useSheetMerge = (sheetList: unknown[][]): IProductItem[] => {
         } else return undefined;
     };
 
-    const getProductList = (list: unknown[]) => {
-        list.forEach((current: any) => {
-            const product = findProduct(current);
-            
-            if (!product) return;
+    const mergeLists = (sheetList: unknown[][]): IProductItem[] => {
+        const productMap = new Map<string, IProductItem>();
 
-            const prevValue = productMap.get(product.name)?.value || 0;
-
-            if (!productMap.has(product.name)) return productMap.set(product.name, product);
-            
-            productMap.set(product.name, { name: product.name, value: product.value + prevValue});
-        })
+        sheetList.forEach((list: unknown[]) => {
+            list.forEach((current: any) => {
+                const product = findProduct(current);
+                
+                if (!product) return;
+    
+                const prevValue = productMap.get(product.name)?.value || 0;
+    
+                if (!productMap.has(product.name)) return productMap.set(product.name, product);
+                
+                productMap.set(product.name, { name: product.name, value: product.value + prevValue});
+            })
+        });
+    
+        return Array.from(productMap.values());
     };
 
-    sheetList.forEach(getProductList);
+    return { mergeLists };
 
-    return Array.from(productMap.values());
 };

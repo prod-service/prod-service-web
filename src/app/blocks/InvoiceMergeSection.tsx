@@ -8,6 +8,7 @@ import { ChangeEvent, useState } from "react";
 const InvoiceMergeSection = () => {
     const [fileName, setFileName] = useState('');
     const { createExcelFile, downloadExcelFile } = useExportExcel();
+    const { mergeLists } = useSheetMerge();
 
     const fileNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
@@ -27,7 +28,7 @@ const InvoiceMergeSection = () => {
             return utils.sheet_to_json(workbook.Sheets[sheetName]);
         });
 
-        const productList: IProductItem[] = useSheetMerge(sheetList);
+        const productList: IProductItem[] = mergeLists(sheetList);
 
         downloadExcelFile(createExcelFile(productList), fileName);
     };

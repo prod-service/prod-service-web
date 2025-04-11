@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export interface ICustomFile {
   file: File,
@@ -23,7 +23,7 @@ const MultipleFileUpload: React.FC<FileUploadProps> = ({
   fileExtension = defaultFileExt,
   onFileUpload,
 }) => {
-    const [fileName, setFileName] = useState<string>("");
+    const [fileName] = useState<string>("");
     const hiddenFileInput = useRef<HTMLInputElement>(null);
     const alertFileExtensionsText: string = fileExtension.map(f => '.'+f).join(', ');
 

@@ -8,7 +8,6 @@ import MenuFullList from "./components/menu/MenuFullList";
 import { useLocalStorage } from "./hooks";
 import WarningMsg from "./components/WarningMsg";
 import { warningMessage } from "./consts";
-import InvoiceMergeSection from "./blocks/InvoiceMergeSection";
 
 const Home: React.FC = () => {
   const [showWarn, setShowWarn] = useState<boolean>(true);
