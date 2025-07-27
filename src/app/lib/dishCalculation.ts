@@ -7,7 +7,7 @@ export interface ICalcObj {
 
 export const calculateTotalProducts = (originObj: IMealObj): IProduct => {
     const dishesList = Object.values(originObj).reduce((prev, meal) => {
-        return { ...prev, ...meal }
+        return mergeWithUniqueKeys(prev, meal);
     }, {});
 
     return Object.keys(dishesList).reduce((prev, dish) => {
@@ -26,6 +26,29 @@ export const calculateTotalProducts = (originObj: IMealObj): IProduct => {
         };
     }, {});
 };
+
+type GenericObject = Record<string, any>;
+
+const mergeWithUniqueKeys = (obj1: GenericObject, obj2: GenericObject): GenericObject => {
+    const result: GenericObject = { ...obj1 };
+
+    for (const [key, value] of Object.entries(obj2)) {
+        if (!(key in result)) {
+            result[key] = value;
+        } else {
+            let i = 1;
+            let newKey = `${key}_${i}`;
+            while (newKey in result) {
+                i++;
+                newKey = `${key}_${i}`;
+            }
+            result[newKey] = value;
+        }
+    }
+
+    return result;
+}
+
 
 export const calculateDishObect = (quantity: number, originObj: ICalcObj): ICalcObj => {
     const defaultQuantity = 1;
