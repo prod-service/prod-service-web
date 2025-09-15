@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-type IInitValue = number | string;
+export type IInitValue = number | string;
 
 export const useInputNumber = (initialValue: IInitValue = 1) => {
     const [inputNumber, setInputNumber] = useState<IInitValue>(initialValue);
